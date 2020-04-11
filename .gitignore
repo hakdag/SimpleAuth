@@ -1,0 +1,7 @@
+packages
+Publish
+obj
+bin
+node_modules
+dist
+.vs
