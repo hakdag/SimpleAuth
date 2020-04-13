@@ -32,6 +32,24 @@ namespace SimpleAuth.Api
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
 
+            // Register the Swagger services
+            services.AddSwaggerDocument(config =>
+            {
+                config.PostProcess = document =>
+                {
+                    document.Info.Version = "v0.1";
+                    document.Info.Title = "Simple Authentication API";
+                    document.Info.Description = "A simple Dotnet Core Authentication API";
+                    document.Info.TermsOfService = "None";
+                    document.Info.Contact = new NSwag.OpenApiContact
+                    {
+                        Name = "Hakan Akdag",
+                        Email = string.Empty,
+                        Url = "https://github.com/hakdag/SimpleAuth"
+                    };
+                };
+            });
+
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -62,6 +80,7 @@ namespace SimpleAuth.Api
             services.AddScoped<IRepository<User>, UserRepository>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<IUserData, UserData>();
             services.AddSingleton<IConfiguration>(Configuration);
         }
@@ -75,6 +94,10 @@ namespace SimpleAuth.Api
             }
 
             app.UseRouting();
+
+            // Register the Swagger generator and the Swagger UI middlewares
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             // global cors policy
             app.UseCors(x => x

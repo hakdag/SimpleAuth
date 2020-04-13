@@ -2,6 +2,7 @@
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SimpleAuth.Data
 {
@@ -18,7 +19,8 @@ namespace SimpleAuth.Data
 
         public User GetByUserName(string userName)
         {
-            return repository.Connection.QueryFirst<User>("SELECT id, username, password FROM public.\"user\" where username = @userName", new { userName });
+            var users = repository.Connection.Query<User>("SELECT id, username, password FROM public.\"user\" where username = @userName", new { userName });
+            return users.FirstOrDefault();
         }
     }
 }

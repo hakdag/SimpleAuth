@@ -22,7 +22,7 @@ namespace SimpleAuth.Api.Controllers
         }
 
         // TODO: Add pagination
-        public IActionResult Get()
+        public ActionResult<List<UserVM>> Get()
         {
             var users = userService.GetAll();
             var userVMs = mapper.Map<List<UserVM>>(users);
