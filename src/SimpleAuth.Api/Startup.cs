@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,9 +10,8 @@ using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
 using SimpleAuth.Contracts.Data;
 using SimpleAuth.Data;
-using System.Text;
-using AutoMapper;
 using SimpleAuth.PasswordHasherRfc2898;
+using System.Text;
 
 namespace SimpleAuth.Api
 {
@@ -54,33 +53,26 @@ namespace SimpleAuth.Api
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            // configure jwt authentication
+            // read settings
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
+
+            // create parameters
+            var tokenValidationParameters = new TokenValidationParameters
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                AuthenticationType = "Bearer"
+            };
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRepository<User>, UserRepository>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<IAuthorizationService>(s => new AuthorizationService(tokenValidationParameters));
             services.AddScoped<IUserData, UserData>();
             services.AddSingleton<IConfiguration>(Configuration);
         }
@@ -105,8 +97,8 @@ namespace SimpleAuth.Api
                 .AllowAnyMethod()
                 .AllowAnyHeader());
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();

@@ -15,7 +15,7 @@ namespace SimpleAuth.Api.Controllers
 
         public ActionResult<AuthorizationResult> Post([FromBody]AuthorizationModel model)
         {
-            var result = service.ValidateToken(model.Token, model.Secret);
+            var result = service.ValidateToken(model.Token);
             return Ok(result);
         }
     }

@@ -31,23 +31,11 @@ namespace TestApplication
             // configure jwt authentication
             var key = Encoding.ASCII.GetBytes(secret.Value);
             services.AddAuthentication(SimpleAuthenticationDefaults.AuthenticationScheme)
-                .AddSimpleAuth<SimpleAuthenticationService>(o =>
-                {
-                    o.Secret = secret.Value;
-                    o.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        AuthenticationType = "Bearer"
-                    };
-                });
+                .AddSimpleAuth<SimpleAuthenticationService>();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("OnlyManagers", policy => policy.Requirements.Add(new OnlyManagersRequirement()));
+                options.AddPolicy("OnlyAdmins", policy => policy.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Admin"));
             });
-            services.AddSingleton<IAuthorizationHandler, SimpleAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

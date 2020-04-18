@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace TestApplication.Controllers
 {
-    [Authorize(Policy = "OnlyManagers")]
+    [Authorize(Policy = "OnlyAdmins")]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase

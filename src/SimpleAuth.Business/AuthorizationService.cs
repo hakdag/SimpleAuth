@@ -1,32 +1,28 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Linq;
 
 namespace SimpleAuth.Business
 {
     public class AuthorizationService : IAuthorizationService
     {
-        public AuthorizationResult ValidateToken(string token, string secret)
+        private readonly TokenValidationParameters tokenValidationParameters;
+
+        public AuthorizationService(TokenValidationParameters tokenValidationParameters)
         {
-            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(secret))
+            this.tokenValidationParameters = tokenValidationParameters;
+        }
+
+        public AuthorizationResult ValidateToken(string token)
+        {
+            if (string.IsNullOrEmpty(token))
             {
                 return new AuthorizationResult { IsAuthorized = false };
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secret);
-            TokenValidationParameters tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false
-            };
             var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
             if (!claimsPrincipal.Identity.IsAuthenticated)
             {
@@ -45,11 +41,6 @@ namespace SimpleAuth.Business
                 UserName = usernameClaim.Value,
                 Roles = roleClaims.Select(c => c.Value).ToArray()
             };
-
-            //var identity = new ClaimsIdentity(claimsPrincipal.Claims, "Bearer");
-            //var principal = new System.Security.Principal.GenericPrincipal(identity, null);
-            //var ticket = new AuthenticationTicket(principal, "Bearer");
-            //return AuthenticateResult.Success(ticket);
         }
     }
 }
