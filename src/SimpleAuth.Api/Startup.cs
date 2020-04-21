@@ -1,10 +1,16 @@
 using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using SimpleAuth.Api.Filters;
+using SimpleAuth.Api.Models;
+using SimpleAuth.Api.Validators;
 using SimpleAuth.Business;
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
@@ -27,6 +33,10 @@ namespace SimpleAuth.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services
+                .AddMvc(options => { options.Filters.Add<ValidateModelAttribute>(); })
+                .AddFluentValidation(opt => { opt.RegisterValidatorsFromAssemblyContaining<Startup>(); });
+            services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
             services.AddCors();
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
@@ -68,6 +78,8 @@ namespace SimpleAuth.Api
             };
 
             // configure DI for application services
+            // services.AddScoped<ValidateModelAttribute>();
+            services.AddTransient<IValidator<CreateUserVM>, CreateUserValidator>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRepository<User>, UserRepository>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();

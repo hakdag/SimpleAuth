@@ -23,24 +23,31 @@ namespace SimpleAuth.Business
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
-            if (!claimsPrincipal.Identity.IsAuthenticated)
+            try
             {
-                return new AuthorizationResult { IsAuthorized = false };
-            }
+                var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
+                if (!claimsPrincipal.Identity.IsAuthenticated)
+                {
+                    return new AuthorizationResult { IsAuthorized = false };
+                }
 
-            var usernameClaim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type.EndsWith("/identity/claims/name"));
-            var roleClaims = claimsPrincipal.Claims.Where(c => c.Type.EndsWith("/identity/claims/role"));
-            if (usernameClaim == null || roleClaims == null || roleClaims.Count() < 1)
+                var usernameClaim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type.EndsWith("/identity/claims/name"));
+                var roleClaims = claimsPrincipal.Claims.Where(c => c.Type.EndsWith("/identity/claims/role"));
+                if (usernameClaim == null || roleClaims == null || roleClaims.Count() < 1)
+                {
+                    return new AuthorizationResult { IsAuthorized = false };
+                }
+                return new AuthorizationResult
+                {
+                    IsAuthorized = true,
+                    UserName = usernameClaim.Value,
+                    Roles = roleClaims.Select(c => c.Value).ToArray()
+                };
+            }
+            catch (SecurityTokenExpiredException exc)
             {
                 return new AuthorizationResult { IsAuthorized = false };
             }
-            return new AuthorizationResult
-            {
-                IsAuthorized = true,
-                UserName = usernameClaim.Value,
-                Roles = roleClaims.Select(c => c.Value).ToArray()
-            };
         }
     }
 }

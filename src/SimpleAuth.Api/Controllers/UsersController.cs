@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SimpleAuth.Api.Filters;
 using SimpleAuth.Api.Models;
+using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SimpleAuth.Api.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/users")]
     public class UsersController : ControllerBase
@@ -28,6 +28,14 @@ namespace SimpleAuth.Api.Controllers
             var users = await userService.GetAll();
             var userVMs = mapper.Map<List<UserVM>>(users);
             return Ok(userVMs);
+        }
+
+        [HttpPost]
+        [ValidateModel]
+        public async Task<ActionResult<ResponseResult>> Post([FromBody] CreateUserVM model)
+        {
+            var response = await userService.Create(model.UserName, model.Password);
+            return Ok(response);
         }
     }
 }
