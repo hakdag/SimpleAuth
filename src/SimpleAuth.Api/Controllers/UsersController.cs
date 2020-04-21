@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SimpleAuth.Api.Models;
 using SimpleAuth.Contracts.Business;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SimpleAuth.Api.Controllers
 {
@@ -22,9 +23,9 @@ namespace SimpleAuth.Api.Controllers
         }
 
         // TODO: Add pagination
-        public ActionResult<List<UserVM>> Get()
+        public async Task<ActionResult<List<UserVM>>> Get()
         {
-            var users = userService.GetAll();
+            var users = await userService.GetAll();
             var userVMs = mapper.Map<List<UserVM>>(users);
             return Ok(userVMs);
         }

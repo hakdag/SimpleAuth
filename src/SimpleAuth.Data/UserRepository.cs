@@ -6,6 +6,7 @@ using SimpleAuth.Contracts.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace SimpleAuth.Data
 {
@@ -43,9 +44,9 @@ namespace SimpleAuth.Data
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<IEnumerable<User>> GetAll()
         {
-            return connection.Query<User>("SELECT id, username, password FROM public.\"user\"");
+            return await connection.QueryAsync<User>("SELECT id, username, password FROM public.\"user\"");
         }
 
         public User GetById(int id)

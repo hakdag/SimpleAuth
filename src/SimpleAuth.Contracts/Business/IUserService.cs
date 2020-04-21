@@ -1,11 +1,12 @@
 ﻿using SimpleAuth.Common;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SimpleAuth.Contracts.Business
 {
     public interface IUserService
     {
-        IEnumerable<User> GetAll();
-        User GetByUserName(string userName);
+        Task<IEnumerable<User>> GetAll();
+        Task<User> GetByUserName(string userName);
     }
 }

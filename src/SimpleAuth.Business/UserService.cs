@@ -2,6 +2,7 @@
 using SimpleAuth.Contracts.Business;
 using SimpleAuth.Contracts.Data;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SimpleAuth.Business
 {
@@ -9,16 +10,10 @@ namespace SimpleAuth.Business
     {
         private readonly IUserData data;
 
-        public UserService(IUserData data)
-        {
-            this.data = data;
-        }
+        public UserService(IUserData data) => this.data = data;
 
-        public IEnumerable<User> GetAll() => data.GetAll();
+        public async Task<IEnumerable<User>> GetAll() => await data.GetAll();
 
-        public User GetByUserName(string userName)
-        {
-            return data.GetByUserName(userName);
-        }
+        public async Task<User> GetByUserName(string userName) => await data.GetByUserName(userName);
     }
 }

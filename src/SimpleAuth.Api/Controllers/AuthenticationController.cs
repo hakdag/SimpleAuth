@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SimpleAuth.Api.Models;
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
+using System.Threading.Tasks;
 
 namespace SimpleAuth.Api.Controllers
 {
@@ -15,9 +16,9 @@ namespace SimpleAuth.Api.Controllers
 
         public AuthenticationController(IAuthenticationService service) => this.service = service;
 
-        public ActionResult<AuthenticationToken> Post([FromBody]AuthenticateModel model)
+        public async Task<ActionResult<AuthenticationToken>> Post([FromBody]AuthenticateModel model)
         {
-            var token = service.Authenticate(model.Username, model.Password);
+            var token = await service.Authenticate(model.Username, model.Password);
             if (token == null)
             {
                 return Unauthorized();

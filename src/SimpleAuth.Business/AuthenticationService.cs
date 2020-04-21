@@ -5,9 +5,9 @@ using SimpleAuth.Contracts.Business;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SimpleAuth.Business
 {
@@ -27,9 +27,9 @@ namespace SimpleAuth.Business
             this.userService = userService;
         }
 
-        public AuthenticationToken Authenticate(string username, string password)
+        public async Task<AuthenticationToken> Authenticate(string username, string password)
         {
-            var user = userService.GetByUserName(username);
+            var user = await userService.GetByUserName(username);
             if (user == null)
             {
                 return null;

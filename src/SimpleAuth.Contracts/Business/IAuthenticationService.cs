@@ -1,9 +1,10 @@
 ﻿using SimpleAuth.Common;
+using System.Threading.Tasks;
 
 namespace SimpleAuth.Contracts.Business
 {
     public interface IAuthenticationService
     {
-        AuthenticationToken Authenticate(string username, string password);
+        Task<AuthenticationToken> Authenticate(string username, string password);
     }
 }

@@ -3,6 +3,7 @@ using SimpleAuth.Common;
 using SimpleAuth.Contracts.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SimpleAuth.Data
 {
@@ -15,11 +16,11 @@ namespace SimpleAuth.Data
             this.repository = repository;
         }
 
-        public IEnumerable<User> GetAll() => repository.GetAll();
+        public async Task<IEnumerable<User>> GetAll() => await repository.GetAll();
 
-        public User GetByUserName(string userName)
+        public async Task<User> GetByUserName(string userName)
         {
-            var users = repository.Connection.Query<User>("SELECT id, username, password FROM public.\"user\" where username = @userName", new { userName });
+            var users = await repository.Connection.QueryAsync<User>("SELECT id, username, password FROM public.\"user\" where username = @userName", new { userName });
             return users.FirstOrDefault();
         }
     }
