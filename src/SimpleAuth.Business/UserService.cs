@@ -1,6 +1,7 @@
 ﻿using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
 using SimpleAuth.Contracts.Data;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,11 +9,16 @@ namespace SimpleAuth.Business
 {
     public class UserService : IUserService
     {
+        private readonly IPasswordHasher passwordHasher;
         private readonly IUserData data;
 
         public readonly string ErrorMessage_UserNameExists = "UserName is taken.";
 
-        public UserService(IUserData data) => this.data = data;
+        public UserService(IPasswordHasher passwordHasher, IUserData data)
+        {
+            this.passwordHasher = passwordHasher;
+            this.data = data;
+        }
 
         public async Task<IEnumerable<User>> GetAll() => await data.GetAll();
 
@@ -27,7 +33,14 @@ namespace SimpleAuth.Business
                 return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UserNameExists } };
             }
 
-            return new ResponseResult { Success = true };
+            var passwordHash = passwordHasher.Hash(password);
+            var response = await data.Create(userName, passwordHash);
+            return response;
+        }
+
+        public async Task UserLoggedIn(User user, string token)
+        {
+            await data.UserLoggedIn(user, token, DateTime.Now);
         }
     }
 }

@@ -9,5 +9,6 @@ namespace SimpleAuth.Contracts.Business
         Task<IEnumerable<User>> GetAll();
         Task<User> GetByUserName(string userName);
         Task<ResponseResult> Create(string userName, string password);
+        Task UserLoggedIn(User user, string token);
     }
 }

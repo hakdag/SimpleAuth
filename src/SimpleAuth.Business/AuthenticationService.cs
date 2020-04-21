@@ -67,6 +67,9 @@ namespace SimpleAuth.Business
                 expires = tokenDescriptor.Expires.Value
             };
 
+            // update user login date and token fields
+            await userService.UserLoggedIn(user, token);
+
             return authenticationToken;
         }
     }
