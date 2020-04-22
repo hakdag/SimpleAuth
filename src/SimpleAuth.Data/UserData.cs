@@ -21,7 +21,7 @@ namespace SimpleAuth.Data
 
         public async Task<User> GetByUserName(string userName)
         {
-            var users = await repository.Connection.QueryAsync<User>("SELECT id, username, password FROM public.\"user\" where username = @userName", new { userName });
+            var users = await repository.Connection.QueryAsync<User>("SELECT id, username FROM public.\"user\" where username = @userName", new { userName });
             return users.FirstOrDefault();
         }
 

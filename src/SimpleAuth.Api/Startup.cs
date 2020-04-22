@@ -78,14 +78,21 @@ namespace SimpleAuth.Api
             };
 
             // configure DI for application services
-            // services.AddScoped<ValidateModelAttribute>();
             services.AddTransient<IValidator<CreateUserVM>, CreateUserValidator>();
+            services.AddTransient<IValidator<CreateRoleVM>, CreateRoleValidator>();
+
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAuthorizationService>(s => new AuthorizationService(tokenValidationParameters));
+
             services.AddScoped<IUserData, UserData>();
+            services.AddScoped<IRoleData, RoleData>();
+
+            services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<IRepository<Role>, RoleRepository>();
+
             services.AddSingleton<IConfiguration>(Configuration);
         }
 

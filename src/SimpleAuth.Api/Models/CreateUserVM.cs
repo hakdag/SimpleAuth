@@ -8,7 +8,6 @@ namespace SimpleAuth.Api.Models
 {
     public class CreateUserVM
     {
-        [Required]
         public string UserName { get; set; }
         public string Password { get; set; }
         public string PasswordConfirm { get; set; }

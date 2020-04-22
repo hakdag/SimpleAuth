@@ -6,30 +6,46 @@ using SimpleAuth.Contracts.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SimpleAuth.Data
 {
-    public class UserRepository : IRepository<User>, IDisposable
+    public class RoleRepository : IRepository<Role>, IDisposable
     {
         private readonly string connectionString;
         private readonly IDbConnection connection;
 
-        IDbConnection IRepository<User>.Connection => connection;
+        IDbConnection IRepository<Role>.Connection => connection;
 
-        public UserRepository(IConfiguration configuration)
+        public RoleRepository(IConfiguration configuration)
         {
             connectionString = configuration.GetSection("DBInfo:ConnectionString").Value;
             connection = new NpgsqlConnection(connectionString);
             connection.Open();
         }
 
-        public void Add(User entity)
+        public async Task<IEnumerable<Role>> GetAll()
+        {
+            return await connection.QueryAsync<Role>("SELECT id, name FROM public.\"role\"");
+        }
+
+        public Role GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(User entity)
+        public void Add(Role entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Role entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(Role entity)
         {
             throw new NotImplementedException();
         }
@@ -40,21 +56,6 @@ namespace SimpleAuth.Data
         }
 
         public void Delete(int id, bool force)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<User>> GetAll()
-        {
-            return await connection.QueryAsync<User>("SELECT id, username FROM public.\"user\"");
-        }
-
-        public User GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(User entity)
         {
             throw new NotImplementedException();
         }
