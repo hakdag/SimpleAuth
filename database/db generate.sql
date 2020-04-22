@@ -6,12 +6,12 @@
 
 CREATE TABLE public."user" (
 	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
-	createddate date NOT NULL DEFAULT CURRENT_DATE,
-	updateddate date NULL,
+	createddate timestamp NOT NULL DEFAULT CURRENT_DATE,
+	updateddate timestamp NULL,
 	isdeleted bool NOT NULL DEFAULT false,
 	username varchar NOT NULL,
 	"password" varchar NOT NULL,
 	"token" varchar NULL,
-	lastlogindate date NULL
+	lastlogindate timestamp NULL
 );
 CREATE UNIQUE INDEX user_username_idx ON public."user" USING btree (username);
