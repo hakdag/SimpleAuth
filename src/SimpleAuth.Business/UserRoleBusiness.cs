@@ -23,6 +23,34 @@ namespace SimpleAuth.Business
 
         public async Task<ResponseResult> Create(int userId, int roleId)
         {
+            var checkResult = await CheckParameters(userId, roleId);
+            if (checkResult != null)
+            {
+                return checkResult;
+            }
+
+            var userRole = await data.Get(userId, roleId);
+            if (userRole != null)
+            {
+                return new ResponseResult { Success = true };
+            }
+
+            return await data.Create(userId, roleId);
+        }
+
+        public async Task<ResponseResult> Delete(int userId, int roleId)
+        {
+            var checkResult = await CheckParameters(userId, roleId);
+            if (checkResult != null)
+            {
+                return checkResult;
+            }
+
+            return await data.Delete(userId, roleId);
+        }
+
+        private async Task<ResponseResult> CheckParameters(int userId, int roleId)
+        {
             // check user exists
             var user = await userData.GetById(userId);
             if (user == null)
@@ -37,7 +65,7 @@ namespace SimpleAuth.Business
                 return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_RoleDoesntExist } };
             }
 
-            return await data.Create(userId, roleId);
+            return null;
         }
     }
 }
