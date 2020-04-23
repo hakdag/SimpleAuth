@@ -59,6 +59,12 @@ namespace SimpleAuth.Api
                 };
             });
 
+            // configure DI for application services
+            ConfigureIoC(services);
+        }
+
+        private void ConfigureIoC(IServiceCollection services)
+        {
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -77,7 +83,6 @@ namespace SimpleAuth.Api
                 AuthenticationType = "Bearer"
             };
 
-            // configure DI for application services
             services.AddTransient<IValidator<CreateUserVM>, CreateUserValidator>();
             services.AddTransient<IValidator<CreateRoleVM>, CreateRoleValidator>();
 
@@ -90,8 +95,7 @@ namespace SimpleAuth.Api
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IRoleData, RoleData>();
 
-            services.AddScoped<IRepository<User>, UserRepository>();
-            services.AddScoped<IRepository<Role>, RoleRepository>();
+            services.AddScoped<IRepository, PGRepository>();
 
             services.AddSingleton<IConfiguration>(Configuration);
         }
