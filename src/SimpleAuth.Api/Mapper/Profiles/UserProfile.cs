@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SimpleAuth.Api.Models;
-using SimpleAuth.Common;
+using SimpleAuth.Common.Entities;
+using System.Linq;
 
 namespace SimpleAuth.Api.Mapper.Profiles
 {
@@ -8,7 +9,7 @@ namespace SimpleAuth.Api.Mapper.Profiles
     {
         public UserProfile()
         {
-            CreateMap<User, UserVM>();
+            CreateMap<User, UserVM>().ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.Roles.Select(r => r.Name).ToArray()));
         }
     }
 }

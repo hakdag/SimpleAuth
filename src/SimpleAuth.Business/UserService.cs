@@ -1,4 +1,5 @@
 ﻿using SimpleAuth.Common;
+using SimpleAuth.Common.Entities;
 using SimpleAuth.Contracts.Business;
 using SimpleAuth.Contracts.Data;
 using System;
