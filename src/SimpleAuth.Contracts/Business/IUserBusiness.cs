@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Contracts.Business
 {
-    public interface IUserService
+    public interface IUserBusiness
     {
         Task<IEnumerable<User>> GetAll();
         Task<User> GetByUserName(string userName);

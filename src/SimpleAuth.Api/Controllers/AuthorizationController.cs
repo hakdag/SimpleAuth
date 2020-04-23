@@ -9,9 +9,9 @@ namespace SimpleAuth.Api.Controllers
     [ApiController]
     public class AuthorizationController : ControllerBase
     {
-        private readonly IAuthorizationService service;
+        private readonly IAuthorizationBusiness service;
 
-        public AuthorizationController(IAuthorizationService service) => this.service = service;
+        public AuthorizationController(IAuthorizationBusiness service) => this.service = service;
 
         public ActionResult<AuthorizationResult> Post([FromBody]AuthorizationModel model)
         {

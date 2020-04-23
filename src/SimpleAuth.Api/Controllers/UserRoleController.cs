@@ -11,9 +11,9 @@ namespace SimpleAuth.Api.Controllers
     [ApiController]
     public class UserRoleController : ControllerBase
     {
-        private readonly IUserRoleService service;
+        private readonly IUserRoleBusiness service;
 
-        public UserRoleController(IUserRoleService service)
+        public UserRoleController(IUserRoleBusiness service)
         {
             this.service = service;
         }

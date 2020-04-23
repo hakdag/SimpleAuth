@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Contracts.Business
 {
-    public interface IUserRoleService
+    public interface IUserRoleBusiness
     {
         Task<ResponseResult> Create(int userId, int roleId);
     }

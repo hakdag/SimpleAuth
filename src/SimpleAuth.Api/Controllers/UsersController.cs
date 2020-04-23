@@ -13,10 +13,10 @@ namespace SimpleAuth.Api.Controllers
     [Route("api/users")]
     public class UsersController : ControllerBase
     {
-        private IUserService userService;
+        private IUserBusiness userService;
         private readonly IMapper mapper;
 
-        public UsersController(IUserService userService, IMapper mapper)
+        public UsersController(IUserBusiness userService, IMapper mapper)
         {
             this.userService = userService;
             this.mapper = mapper;

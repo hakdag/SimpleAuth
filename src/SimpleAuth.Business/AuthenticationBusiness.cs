@@ -12,16 +12,16 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Business
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationBusiness : IAuthenticationBusiness
     {
         private readonly AppSettings appSettings;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IUserService userService;
+        private readonly IUserBusiness userService;
 
-        public AuthenticationService(
+        public AuthenticationBusiness(
             IOptions<AppSettings> appSettings,
             IPasswordHasher passwordHasher,
-            IUserService userService)
+            IUserBusiness userService)
         {
             this.appSettings = appSettings.Value;
             this.passwordHasher = passwordHasher;

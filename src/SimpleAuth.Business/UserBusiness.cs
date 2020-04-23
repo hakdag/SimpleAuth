@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Business
 {
-    public class UserService : IUserService
+    public class UserBusiness : IUserBusiness
     {
         private readonly IPasswordHasher passwordHasher;
         private readonly IUserData data;
 
         public readonly string ErrorMessage_UserNameExists = "UserName is taken.";
 
-        public UserService(IPasswordHasher passwordHasher, IUserData data)
+        public UserBusiness(IPasswordHasher passwordHasher, IUserData data)
         {
             this.passwordHasher = passwordHasher;
             this.data = data;

@@ -87,12 +87,12 @@ namespace SimpleAuth.Api
             services.AddTransient<IValidator<CreateRoleVM>, CreateRoleValidator>();
             services.AddTransient<IValidator<UserRoleVM>, UserRoleValidator>();
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<IUserRoleService, UserRoleService>();
+            services.AddScoped<IUserBusiness, UserBusiness>();
+            services.AddScoped<IRoleBusiness, RoleBusiness>();
+            services.AddScoped<IUserRoleBusiness, UserRoleBusiness>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IAuthorizationService>(s => new AuthorizationService(tokenValidationParameters));
+            services.AddScoped<IAuthenticationBusiness, AuthenticationBusiness>();
+            services.AddScoped<IAuthorizationBusiness>(s => new AuthorizationBusiness(tokenValidationParameters));
 
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IRoleData, RoleData>();

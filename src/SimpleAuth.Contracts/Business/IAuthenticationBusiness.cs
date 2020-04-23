@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Contracts.Business
 {
-    public interface IAuthenticationService
+    public interface IAuthenticationBusiness
     {
         Task<AuthenticationToken> Authenticate(string username, string password);
     }

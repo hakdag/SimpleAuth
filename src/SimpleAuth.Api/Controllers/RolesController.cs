@@ -13,10 +13,10 @@ namespace SimpleAuth.Api.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
-        private readonly IRoleService service;
+        private readonly IRoleBusiness service;
         private readonly IMapper mapper;
 
-        public RolesController(IRoleService service, IMapper mapper)
+        public RolesController(IRoleBusiness service, IMapper mapper)
         {
             this.service = service;
             this.mapper = mapper;

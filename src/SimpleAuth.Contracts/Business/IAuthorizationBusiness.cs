@@ -2,7 +2,7 @@
 
 namespace SimpleAuth.Contracts.Business
 {
-    public interface IAuthorizationService
+    public interface IAuthorizationBusiness
     {
         AuthorizationResult ValidateToken(string token);
     }

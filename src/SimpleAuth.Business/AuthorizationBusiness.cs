@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace SimpleAuth.Business
 {
-    public class AuthorizationService : IAuthorizationService
+    public class AuthorizationBusiness : IAuthorizationBusiness
     {
         private readonly TokenValidationParameters tokenValidationParameters;
 
-        public AuthorizationService(TokenValidationParameters tokenValidationParameters)
+        public AuthorizationBusiness(TokenValidationParameters tokenValidationParameters)
         {
             this.tokenValidationParameters = tokenValidationParameters;
         }

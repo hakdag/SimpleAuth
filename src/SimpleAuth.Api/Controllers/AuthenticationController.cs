@@ -12,9 +12,9 @@ namespace SimpleAuth.Api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationService service;
+        private readonly IAuthenticationBusiness service;
 
-        public AuthenticationController(IAuthenticationService service) => this.service = service;
+        public AuthenticationController(IAuthenticationBusiness service) => this.service = service;
 
         public async Task<ActionResult<AuthenticationToken>> Post([FromBody]AuthenticateModel model)
         {

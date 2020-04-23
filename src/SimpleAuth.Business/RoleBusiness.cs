@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Business
 {
-    public class RoleService : IRoleService
+    public class RoleBusiness : IRoleBusiness
     {
         private readonly IRoleData data;
 
         public readonly string ErrorMessage_RoleExists = "Specified role already exists.";
 
-        public RoleService(IRoleData data)
+        public RoleBusiness(IRoleData data)
         {
             this.data = data;
         }
