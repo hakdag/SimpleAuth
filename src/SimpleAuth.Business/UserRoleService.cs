@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Business
 {
-    public class AssignToRoleService : IAssignToRoleService
+    public class UserRoleService : IUserRoleService
     {
-        private readonly IAssignToRoleData data;
+        private readonly IUserRoleData data;
         private readonly IUserData userData;
         private readonly IRoleData roleData;
 
         public readonly string ErrorMessage_UserDoesntExist = "User couldn't be found.";
         public readonly string ErrorMessage_RoleDoesntExist = "Role couldn't be found.";
 
-        public AssignToRoleService(IAssignToRoleData data, IUserData userData, IRoleData roleData)
+        public UserRoleService(IUserRoleData data, IUserData userData, IRoleData roleData)
         {
             this.data = data;
             this.userData = userData;

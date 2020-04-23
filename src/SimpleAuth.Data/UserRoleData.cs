@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Data
 {
-    public class AssignToRoleData : BaseData<UserRole>, IAssignToRoleData
+    public class UserRoleData : BaseData<UserRole>, IUserRoleData
     {
         public readonly string ErrorMessage_GenericError = "Error occured when assinging role to the user.";
 
-        public AssignToRoleData(IRepository repository) : base(repository) { }
+        public UserRoleData(IRepository repository) : base(repository) { }
 
         public async Task<ResponseResult> Create(int userId, int roleId)
         {

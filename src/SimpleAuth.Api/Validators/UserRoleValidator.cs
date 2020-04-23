@@ -3,9 +3,9 @@ using SimpleAuth.Api.Models;
 
 namespace SimpleAuth.Api.Validators
 {
-    public class AssignToRoleValidator : AbstractValidator<AssignToRoleVM>
+    public class UserRoleValidator : AbstractValidator<UserRoleVM>
     {
-        public AssignToRoleValidator()
+        public UserRoleValidator()
         {
             RuleFor(m => m.UserId)
                 .GreaterThan(0);

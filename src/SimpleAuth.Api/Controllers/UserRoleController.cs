@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Api.Controllers
 {
-    [Route("api/assigntorole")]
+    [Route("api/userrole")]
     [ApiController]
-    public class AssignToRoleController : ControllerBase
+    public class UserRoleController : ControllerBase
     {
-        private readonly IAssignToRoleService service;
+        private readonly IUserRoleService service;
 
-        public AssignToRoleController(IAssignToRoleService service)
+        public UserRoleController(IUserRoleService service)
         {
             this.service = service;
         }
 
         [HttpPost]
         [ValidateModel]
-        public async Task<ActionResult<ResponseResult>> Post([FromBody] AssignToRoleVM model)
+        public async Task<ActionResult<ResponseResult>> Post([FromBody] UserRoleVM model)
         {
             var response = await service.Create(model.UserId, model.RoleId);
             return Ok(response);
