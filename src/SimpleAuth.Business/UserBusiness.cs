@@ -13,6 +13,7 @@ namespace SimpleAuth.Business
         private readonly IPasswordHasher passwordHasher;
         private readonly IUserData data;
 
+        public readonly string ErrorMessage_UserDoesNotExist = "User does not exist.";
         public readonly string ErrorMessage_UserNameExists = "UserName is taken.";
 
         public UserBusiness(IPasswordHasher passwordHasher, IUserData data)
@@ -36,6 +37,26 @@ namespace SimpleAuth.Business
 
             var passwordHash = passwordHasher.Hash(password);
             var response = await data.Create(userName, passwordHash);
+            return response;
+        }
+
+        public async Task<ResponseResult> Update(int id, string newUserName)
+        {
+            // check if user exists
+            var existingUser = await data.GetById(id);
+            if (existingUser == null)
+            {
+                return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UserDoesNotExist } };
+            }
+
+            // check if username exists
+            existingUser = await data.GetByUserName(newUserName);
+            if (existingUser != null)
+            {
+                return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UserNameExists } };
+            }
+
+            var response = await data.Update(id, newUserName);
             return response;
         }
 

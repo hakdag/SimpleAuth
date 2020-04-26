@@ -33,6 +33,10 @@ namespace SimpleAuth.Data
             // get user
             var users = await RunQuery("SELECT id, username, password FROM public.\"user\" where username = @userName and isdeleted = false", new { userName });
             var user = users.FirstOrDefault();
+            if (user == null)
+            {
+                return null;
+            }
 
             // get user roles
             user.Roles = await roleData.GetUserRoles(user);
@@ -48,6 +52,18 @@ namespace SimpleAuth.Data
             }
 
             return new ResponseResult { Success = false, Messages = new[] { "Error occured when creating the user." } };
+        }
+
+        public async Task<ResponseResult> Update(int id, string newUserName)
+        {
+            var UpdatedDate = DateTime.Now;
+            var result = await Execute("UPDATE public.user SET username = @newUserName, updateddate = @UpdatedDate WHERE id = @id", new { id, newUserName, UpdatedDate });
+            if (result > 0)
+            {
+                return new ResponseResult { Success = true };
+            }
+
+            return new ResponseResult { Success = false, Messages = new[] { "Error occured when updating the user." } };
         }
 
         public async Task UserLoggedIn(User user, string token, DateTime lastLoginDate)

@@ -38,6 +38,14 @@ namespace SimpleAuth.Api.Controllers
             return Ok(response);
         }
 
+        [HttpPut]
+        [ValidateModel]
+        public async Task<ActionResult<ResponseResult>> Put([FromBody] UpdateUserVM model)
+        {
+            var response = await business.Update(model.UserId, model.NewUserName);
+            return Ok(response);
+        }
+
         [HttpDelete]
         public async Task<ActionResult<ResponseResult>> Delete(int id)
         {
