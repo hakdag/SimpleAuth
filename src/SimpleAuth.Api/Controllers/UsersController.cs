@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SimpleAuth.Api.Controllers
 {
     [ApiController]
-    [Route("api/users/{id?}")]
+    [Route("api/user/{id?}")]
     public class UsersController : ControllerBase
     {
         private IUserBusiness business;

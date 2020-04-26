@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Api.Controllers
 {
-    [Route("api/roles/{id?}")]
+    [Route("api/role/{id?}")]
     [ApiController]
     public class RolesController : ControllerBase
     {
