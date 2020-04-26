@@ -84,7 +84,9 @@ namespace SimpleAuth.Api
             };
 
             services.AddTransient<IValidator<CreateUserVM>, CreateUserValidator>();
+            services.AddTransient<IValidator<UpdateUserVM>, UpdateUserValidator>();
             services.AddTransient<IValidator<CreateRoleVM>, CreateRoleValidator>();
+            services.AddTransient<IValidator<UpdateRoleVM>, UpdateRoleValidator>();
             services.AddTransient<IValidator<UserRoleVM>, UserRoleValidator>();
 
             services.AddScoped<IUserBusiness, UserBusiness>();

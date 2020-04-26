@@ -2,6 +2,7 @@
 using SimpleAuth.Common;
 using SimpleAuth.Common.Entities;
 using SimpleAuth.Contracts.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,18 @@ namespace SimpleAuth.Data
             }
 
             return new ResponseResult { Success = false, Messages = new[] { "Error occured when creating the role." } };
+        }
+
+        public async Task<ResponseResult> Update(int roleId, string newRoleName)
+        {
+            var UpdatedDate = DateTime.Now;
+            var result = await Execute("UPDATE public.role SET name = @newRoleName, updateddate = @UpdatedDate WHERE id = @roleId", new { roleId, newRoleName, UpdatedDate });
+            if (result > 0)
+            {
+                return new ResponseResult { Success = true };
+            }
+
+            return new ResponseResult { Success = false, Messages = new[] { "Error occured when updating the role." } };
         }
 
         public async Task<Role> GetById(int roleId)

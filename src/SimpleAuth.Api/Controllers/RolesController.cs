@@ -37,5 +37,13 @@ namespace SimpleAuth.Api.Controllers
             var response = await service.Create(model.Name);
             return Ok(response);
         }
+
+        [HttpPut]
+        [ValidateModel]
+        public async Task<ActionResult<ResponseResult>> Put([FromBody] UpdateRoleVM model)
+        {
+            var response = await service.Update(model.RoleId, model.NewRoleName);
+            return Ok(response);
+        }
     }
 }
