@@ -10,5 +10,6 @@ namespace SimpleAuth.Contracts.Business
         Task<IEnumerable<Role>> GetAll();
         Task<ResponseResult> Create(string Name);
         Task<ResponseResult> Update(int roleId, string newRoleName);
+        Task<ResponseResult> Delete(int id);
     }
 }

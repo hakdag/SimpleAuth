@@ -11,9 +11,13 @@ namespace SimpleAuth.Data
 {
     public class RoleData : BaseData<Role>, IRoleData
     {
+        public readonly string ErrorMessage_CreateRoleError = "Error occured when creating the role.";
+        public readonly string ErrorMessage_UpdateRoleError = "Error occured when updating the role.";
+        public readonly string ErrorMessage_DeleteRoleError = "Error occured when deleting the role.";
+
         public RoleData(IRepository repository) : base(repository) { }
 
-        public async Task<IEnumerable<Role>> GetAll() => await RunQuery("SELECT id, name FROM public.\"role\"");
+        public async Task<IEnumerable<Role>> GetAll() => await RunQuery("SELECT id, name FROM public.role where isdeleted <> true");
 
         public async Task<Role> GetByRoleName(string name)
         {
@@ -29,7 +33,7 @@ namespace SimpleAuth.Data
                 return new ResponseResult { Success = true };
             }
 
-            return new ResponseResult { Success = false, Messages = new[] { "Error occured when creating the role." } };
+            return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_CreateRoleError } };
         }
 
         public async Task<ResponseResult> Update(int roleId, string newRoleName)
@@ -41,25 +45,36 @@ namespace SimpleAuth.Data
                 return new ResponseResult { Success = true };
             }
 
-            return new ResponseResult { Success = false, Messages = new[] { "Error occured when updating the role." } };
+            return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UpdateRoleError } };
+        }
+
+        public async Task<ResponseResult> Delete(int id)
+        {
+            var result = await Execute("UPDATE public.role SET isdeleted = true WHERE id = @id", new { id });
+            if (result > 0)
+            {
+                return new ResponseResult { Success = true };
+            }
+
+            return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_DeleteRoleError } };
         }
 
         public async Task<Role> GetById(int roleId)
         {
-            var roles = await RunQuery("SELECT id, name FROM public.\"role\" where id = @roleId", new { roleId });
+            var roles = await RunQuery("SELECT id, name FROM public.role where id = @roleId and isdeleted <> true", new { roleId });
             return roles.FirstOrDefault();
         }
 
         public async Task<Role[]> GetUserRoles(User user)
         {
-            var roles = await RunQuery("select r.id, r.name from public.\"role\" r inner join public.userrole ur on r.id = ur.roleid where ur.userid = @userId", new { userId = user.Id });
+            var roles = await RunQuery("select r.id, r.name from public.role r inner join public.userrole ur on r.id = ur.roleid where ur.userid = @userId and r.isdeleted <> true", new { userId = user.Id });
             return roles.ToArray();
         }
 
         public async Task SetUsersRoles(User[] users)
         {
             var ids = users.Select(u => u.Id).ToArray();
-            var items = await Repository.Connection.QueryAsync<SetUserRole>("select ur.userid as \"UserId\", r.id as \"RoleId\", r.name as \"RoleName\" from public.role r inner join public.userrole ur on r.id = ur.roleid where ur.userid = ANY(@ids)", new { ids });
+            var items = await Repository.Connection.QueryAsync<SetUserRole>("select ur.userid as \"UserId\", r.id as \"RoleId\", r.name as \"RoleName\" from public.role r inner join public.userrole ur on r.id = ur.roleid where ur.userid = ANY(@ids) and r.isdeleted <> true", new { ids });
             foreach (var user in users)
             {
                 user.Roles = items.Where(r => r.UserId == user.Id).Select(r => new Role { Id = r.RoleId, Name = r.RoleName }).ToArray();

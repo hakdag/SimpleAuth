@@ -53,5 +53,18 @@ namespace SimpleAuth.Business
             var response = await data.Update(roleId, newRoleName);
             return response;
         }
+
+        public async Task<ResponseResult> Delete(int id)
+        {
+            // check if role  exists
+            var existingRole = await data.GetById(id);
+            if (existingRole == null)
+            {
+                return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_RoleDoesNotExist } };
+            }
+
+            var response = await data.Delete(id);
+            return response;
+        }
     }
 }
