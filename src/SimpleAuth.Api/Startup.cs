@@ -73,6 +73,8 @@ namespace SimpleAuth.Api
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
+            /* CONFIGURE THIS PART FOR YOUR OWN NEEDS */
+            /* ---------------------------------------------------------------- */
             // create parameters
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -82,6 +84,7 @@ namespace SimpleAuth.Api
                 ValidateAudience = false,
                 AuthenticationType = "Bearer"
             };
+            /* ---------------------------------------------------------------- */
 
             services.AddTransient<IValidator<CreateUserVM>, CreateUserValidator>();
             services.AddTransient<IValidator<UpdateUserVM>, UpdateUserValidator>();
