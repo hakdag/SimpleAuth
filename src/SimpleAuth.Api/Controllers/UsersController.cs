@@ -10,22 +10,22 @@ using System.Threading.Tasks;
 namespace SimpleAuth.Api.Controllers
 {
     [ApiController]
-    [Route("api/users")]
+    [Route("api/users/{id?}")]
     public class UsersController : ControllerBase
     {
-        private IUserBusiness userService;
+        private IUserBusiness business;
         private readonly IMapper mapper;
 
-        public UsersController(IUserBusiness userService, IMapper mapper)
+        public UsersController(IUserBusiness business, IMapper mapper)
         {
-            this.userService = userService;
+            this.business = business;
             this.mapper = mapper;
         }
 
         // TODO: Add pagination
         public async Task<ActionResult<List<UserVM>>> Get()
         {
-            var users = await userService.GetAll();
+            var users = await business.GetAll();
             var userVMs = mapper.Map<List<UserVM>>(users);
             return Ok(userVMs);
         }
@@ -34,7 +34,14 @@ namespace SimpleAuth.Api.Controllers
         [ValidateModel]
         public async Task<ActionResult<ResponseResult>> Post([FromBody] CreateUserVM model)
         {
-            var response = await userService.Create(model.UserName, model.Password);
+            var response = await business.Create(model.UserName, model.Password);
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<ResponseResult>> Delete(int id)
+        {
+            var response = await business.Delete(id);
             return Ok(response);
         }
     }

@@ -13,5 +13,6 @@ namespace SimpleAuth.Contracts.Data
         Task<User> GetById(int userId);
         Task<ResponseResult> Create(string userName, string passwordHash);
         Task UserLoggedIn(User user, string token, DateTime lastLoginDate);
+        Task<ResponseResult> Delete(int id);
     }
 }

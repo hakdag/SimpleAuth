@@ -11,5 +11,6 @@ namespace SimpleAuth.Contracts.Business
         Task<User> GetByUserName(string userName);
         Task<ResponseResult> Create(string userName, string password);
         Task UserLoggedIn(User user, string token);
+        Task<ResponseResult> Delete(int id);
     }
 }

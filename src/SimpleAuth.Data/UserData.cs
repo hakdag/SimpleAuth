@@ -10,8 +10,9 @@ namespace SimpleAuth.Data
 {
     public class UserData : BaseData<User>, IUserData
     {
-        private readonly IRepository repository;
         private readonly IRoleData roleData;
+
+        public readonly string ErrorMessage_DeleteUserError = "Error occured when deleting the user.";
 
         public UserData(IRepository repository, IRoleData roleData) : base(repository)
         {
@@ -20,7 +21,7 @@ namespace SimpleAuth.Data
 
         public async Task<IEnumerable<User>> GetAll()
         {
-            var users = (await RunQuery("SELECT id, username, lastlogindate FROM public.\"user\"")).ToArray();
+            var users = (await RunQuery("SELECT id, username, lastlogindate FROM public.user where isdeleted = false")).ToArray();
 
             // set roles
             await roleData.SetUsersRoles(users);
@@ -30,7 +31,7 @@ namespace SimpleAuth.Data
         public async Task<User> GetByUserName(string userName)
         {
             // get user
-            var users = await RunQuery("SELECT id, username, password FROM public.\"user\" where username = @userName", new { userName });
+            var users = await RunQuery("SELECT id, username, password FROM public.\"user\" where username = @userName and isdeleted = false", new { userName });
             var user = users.FirstOrDefault();
 
             // get user roles
@@ -51,12 +52,23 @@ namespace SimpleAuth.Data
 
         public async Task UserLoggedIn(User user, string token, DateTime lastLoginDate)
             =>
-                await Execute("UPDATE public.\"user\" SET token = @token, lastlogindate = @lastLoginDate WHERE username = @userName", new { userName = user.UserName, token, lastLoginDate });
+                await Execute("UPDATE public.user SET token = @token, lastlogindate = @lastLoginDate WHERE username = @userName", new { userName = user.UserName, token, lastLoginDate });
 
         public async Task<User> GetById(int userId)
         {
-            var users = await RunQuery("SELECT id, username FROM public.\"user\" where id = @userId", new { userId });
+            var users = await RunQuery("SELECT id, username FROM public.\"user\" where id = @userId and isdeleted = false", new { userId });
             return users.FirstOrDefault();
+        }
+
+        public async Task<ResponseResult> Delete(int id)
+        {
+            var result = await Execute("UPDATE public.user SET isdeleted = true WHERE id = @id", new { id });
+            if (result > 0)
+            {
+                return new ResponseResult { Success = true };
+            }
+
+            return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_DeleteUserError } };
         }
     }
 }

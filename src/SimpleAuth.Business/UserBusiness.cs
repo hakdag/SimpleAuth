@@ -39,9 +39,8 @@ namespace SimpleAuth.Business
             return response;
         }
 
-        public async Task UserLoggedIn(User user, string token)
-        {
-            await data.UserLoggedIn(user, token, DateTime.Now);
-        }
+        public async Task UserLoggedIn(User user, string token) => await data.UserLoggedIn(user, token, DateTime.Now);
+
+        public async Task<ResponseResult> Delete(int id) => await data.Delete(id);
     }
 }
