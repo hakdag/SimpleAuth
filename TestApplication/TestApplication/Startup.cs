@@ -24,13 +24,8 @@ namespace TestApplication
         {
             services.AddControllers();
 
-            // configure strongly typed settings objects
-            var secret = Configuration.GetSection("AppSettings:Secret");
-
-            // configure jwt authentication
-            var key = Encoding.ASCII.GetBytes(secret.Value);
             services.AddAuthentication(SimpleAuthenticationDefaults.AuthenticationScheme)
-                .AddSimpleAuth<SimpleAuthorizationService>();
+                .AddSimpleAuth<SimpleAuthorizationService>(new SimpleAuthenticationOptions { AuthApiBaseAddress = "http://localhost:4000/" });
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("OnlyAdmins", policy => policy.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Admin"));
