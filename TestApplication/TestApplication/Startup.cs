@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SimpleAuthExtensions;
 using SimpleAuthExtensions.Authentication;
+using SimpleAuthExtensions.Authorization;
 using System.Text;
 
 namespace TestApplication
@@ -29,7 +30,7 @@ namespace TestApplication
             // configure jwt authentication
             var key = Encoding.ASCII.GetBytes(secret.Value);
             services.AddAuthentication(SimpleAuthenticationDefaults.AuthenticationScheme)
-                .AddSimpleAuth<SimpleAuthenticationService>();
+                .AddSimpleAuth<SimpleAuthorizationService>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("OnlyAdmins", policy => policy.RequireClaim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", "Admin"));

@@ -2,6 +2,7 @@
 using SimpleAuth.Api.Models;
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
+using System.Threading.Tasks;
 
 namespace SimpleAuth.Api.Controllers
 {
@@ -13,9 +14,9 @@ namespace SimpleAuth.Api.Controllers
 
         public AuthorizationController(IAuthorizationBusiness service) => this.service = service;
 
-        public ActionResult<AuthorizationResult> Post([FromBody]AuthorizationModel model)
+        public async Task<ActionResult<AuthorizationResult>> PostAsync([FromBody]AuthorizationModel model)
         {
-            var result = service.ValidateToken(model.Token);
+            var result = await service.ValidateToken(model.Token);
             return Ok(result);
         }
     }

@@ -1,21 +1,25 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
+using SimpleAuth.Contracts.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SimpleAuth.Business
 {
     public class AuthorizationBusiness : IAuthorizationBusiness
     {
+        private readonly IUserData userData;
         private readonly TokenValidationParameters tokenValidationParameters;
 
-        public AuthorizationBusiness(TokenValidationParameters tokenValidationParameters)
+        public AuthorizationBusiness(IUserData userData, TokenValidationParameters tokenValidationParameters)
         {
+            this.userData = userData;
             this.tokenValidationParameters = tokenValidationParameters;
         }
 
-        public AuthorizationResult ValidateToken(string token)
+        public async Task<AuthorizationResult> ValidateToken(string token)
         {
             if (string.IsNullOrEmpty(token))
             {
@@ -37,6 +41,16 @@ namespace SimpleAuth.Business
                 {
                     return new AuthorizationResult { IsAuthorized = false };
                 }
+
+                // check user
+                var user = await userData.GetByUserName(usernameClaim.Value);
+                if (user == null)
+                {
+                    return new AuthorizationResult { IsAuthorized = false };
+                }
+
+                // TODO: check account lock
+
                 return new AuthorizationResult
                 {
                     IsAuthorized = true,

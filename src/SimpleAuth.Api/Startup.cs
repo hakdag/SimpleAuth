@@ -97,7 +97,7 @@ namespace SimpleAuth.Api
             services.AddScoped<IUserRoleBusiness, UserRoleBusiness>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IAuthenticationBusiness, AuthenticationBusiness>();
-            services.AddScoped<IAuthorizationBusiness>(s => new AuthorizationBusiness(tokenValidationParameters));
+            services.AddScoped<IAuthorizationBusiness>(s => new AuthorizationBusiness(s.GetRequiredService<IUserData>(), tokenValidationParameters));
 
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IRoleData, RoleData>();
