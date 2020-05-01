@@ -91,10 +91,12 @@ namespace SimpleAuth.Api
             services.AddTransient<IValidator<CreateRoleVM>, CreateRoleValidator>();
             services.AddTransient<IValidator<UpdateRoleVM>, UpdateRoleValidator>();
             services.AddTransient<IValidator<UserRoleVM>, UserRoleValidator>();
+            services.AddTransient<IValidator<ChangePasswordVM>, ChangePasswordValidator>();
 
             services.AddScoped<IUserBusiness, UserBusiness>();
             services.AddScoped<IRoleBusiness, RoleBusiness>();
             services.AddScoped<IUserRoleBusiness, UserRoleBusiness>();
+            services.AddScoped<IChangePasswordBusiness, ChangePasswordBusiness>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IAuthenticationBusiness, AuthenticationBusiness>();
             services.AddScoped<IAuthorizationBusiness>(s => new AuthorizationBusiness(s.GetRequiredService<IUserData>(), tokenValidationParameters));
@@ -102,6 +104,7 @@ namespace SimpleAuth.Api
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IRoleData, RoleData>();
             services.AddScoped<IUserRoleData, UserRoleData>();
+            services.AddScoped<IChangePasswordData, ChangePasswordData>();
 
             services.AddScoped<IRepository, PGRepository>();
 

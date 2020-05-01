@@ -14,7 +14,7 @@ namespace SimpleAuth.Api.Controllers
 
         public AuthorizationController(IAuthorizationBusiness service) => this.service = service;
 
-        public async Task<ActionResult<AuthorizationResult>> PostAsync([FromBody]AuthorizationModel model)
+        public async Task<ActionResult<AuthorizationResult>> Post([FromBody]AuthorizationModel model)
         {
             var result = await service.ValidateToken(model.Token);
             return Ok(result);
