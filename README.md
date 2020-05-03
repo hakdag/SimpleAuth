@@ -1,3 +1,5 @@
+https://github.com/hakdag/SimpleAuth/workflows/SimpleAuth/badge.svg
+ 
 # SimpleAuth
 Dotnet Core Based Simple Authentication & Authorization
 
