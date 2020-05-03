@@ -10,8 +10,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    
     steps:
+    - working-directory: src
     - uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
@@ -19,8 +20,6 @@ jobs:
         dotnet-version: 3.1.101
     - name: Install dependencies
       run: dotnet restore
-    - name: Dir
-      working-directory: src
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
