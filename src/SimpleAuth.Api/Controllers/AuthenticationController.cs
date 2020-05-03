@@ -12,13 +12,13 @@ namespace SimpleAuth.Api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationBusiness service;
+        private readonly IAuthenticationBusiness business;
 
-        public AuthenticationController(IAuthenticationBusiness service) => this.service = service;
+        public AuthenticationController(IAuthenticationBusiness business) => this.business = business;
 
         public async Task<ActionResult<AuthenticationToken>> Post([FromBody]AuthenticateModel model)
         {
-            var token = await service.Authenticate(model.Username, model.Password);
+            var token = await business.Authenticate(model.Username, model.Password);
             if (token == null)
             {
                 return Unauthorized();

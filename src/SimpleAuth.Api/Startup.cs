@@ -95,6 +95,7 @@ namespace SimpleAuth.Api
             services.AddTransient<IValidator<UpdateRoleVM>, UpdateRoleValidator>();
             services.AddTransient<IValidator<UserRoleVM>, UserRoleValidator>();
             services.AddTransient<IValidator<ChangePasswordVM>, ChangePasswordValidator>();
+            services.AddTransient<IValidator<LockAccountVM>, LockAccountValidator>();
 
             services.AddScoped<IUserBusiness, UserBusiness>();
             services.AddScoped<IRoleBusiness, RoleBusiness>();
@@ -102,6 +103,7 @@ namespace SimpleAuth.Api
             services.AddScoped<IChangePasswordBusiness, ChangePasswordBusiness>();
             services.AddScoped<IPasswordHistoryBusiness>(s => new PasswordHistoryBusiness(s.GetRequiredService<IPasswordHistoryData>(), appSettings.PasswordChangeHistoryRule));
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<ILockAccountBusiness, LockAccountBusiness>();
             services.AddScoped<IAuthenticationBusiness, AuthenticationBusiness>();
             services.AddScoped<IAuthorizationBusiness>(s => new AuthorizationBusiness(s.GetRequiredService<IUserData>(), tokenValidationParameters));
             Enum.TryParse<PasswordChangeStrategies>(appSettings.PasswordChangeStrategy, out var passwordChangeStrategy);
