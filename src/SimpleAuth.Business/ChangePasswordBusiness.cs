@@ -1,5 +1,6 @@
 ﻿using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
+using SimpleAuth.Contracts.Business.Strategies;
 using SimpleAuth.Contracts.Data;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace SimpleAuth.Business
     public class ChangePasswordBusiness : IChangePasswordBusiness
     {
         private readonly IChangePasswordData data;
+        private readonly IChangePasswordStrategy changePasswordStrategy;
         private readonly IUserBusiness userBusiness;
         private readonly IPasswordHasher passwordHasher;
 
@@ -18,9 +20,14 @@ namespace SimpleAuth.Business
         public readonly string ErrorMessage_WrongPassword = "Password is wrong.";
         public readonly string ErrorMessage_NewPasswordCannotBeSame = "New password cannot be same as the old one.";
 
-        public ChangePasswordBusiness(IChangePasswordData data, IUserBusiness userBusiness, IPasswordHasher passwordHasher)
+        public ChangePasswordBusiness(
+            IChangePasswordData data,
+            IChangePasswordStrategy changePasswordStrategy,
+            IUserBusiness userBusiness,
+            IPasswordHasher passwordHasher)
         {
             this.data = data;
+            this.changePasswordStrategy = changePasswordStrategy;
             this.userBusiness = userBusiness;
             this.passwordHasher = passwordHasher;
         }
@@ -28,30 +35,21 @@ namespace SimpleAuth.Business
         public async Task<ResponseResult> ChangePassword(string userName, string oldPassword, string password)
         {
             // check is username exists
-            var existingUser = await userBusiness.GetByUserName(userName);
-            if (existingUser == null)
+            var user = await userBusiness.GetByUserName(userName);
+            if (user == null)
             {
                 return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UserDoesNotExist } };
             }
 
-            var oldPasswordHash = passwordHasher.Hash(oldPassword);
-            var newPasswordHash = passwordHasher.Hash(password);
 
             // check old password correct or not
-            if (oldPasswordHash.Equals(existingUser.Password))
+            var checkResult = passwordHasher.Check(user.Password, oldPassword);
+            if (!checkResult.Verified)
             {
                 return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_WrongPassword } };
             }
 
-            // old and new passwords can not be same
-            if (newPasswordHash.Equals(existingUser.Password))
-            {
-                return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_NewPasswordCannotBeSame } };
-            }
-
-            // TODO: new password should not be used before.
-
-            return await data.Update(existingUser, newPasswordHash);
+            return await changePasswordStrategy.UpdatePassword(user, password);
         }
     }
 }

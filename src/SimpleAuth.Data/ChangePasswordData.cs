@@ -10,10 +10,10 @@ namespace SimpleAuth.Data
     {
         public ChangePasswordData(IRepository repository) : base(repository) { }
 
-        public async Task<ResponseResult> Update(User user, string passwordHash)
+        public async Task<ResponseResult> Update(long userId, string passwordHash)
         {
             var UpdatedDate = DateTime.Now;
-            var result = await Execute("UPDATE public.user SET password = @passwordHash, updateddate = @UpdatedDate WHERE id = @id", new { id = user.Id, passwordHash, UpdatedDate });
+            var result = await Execute("UPDATE public.user SET password = @passwordHash, updateddate = @UpdatedDate WHERE id = @userId", new { userId, passwordHash, UpdatedDate });
             if (result > 0)
             {
                 return new ResponseResult { Success = true };

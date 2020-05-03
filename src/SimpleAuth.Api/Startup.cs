@@ -12,11 +12,14 @@ using SimpleAuth.Api.Filters;
 using SimpleAuth.Api.Models;
 using SimpleAuth.Api.Validators;
 using SimpleAuth.Business;
+using SimpleAuth.Business.Strategies;
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
+using SimpleAuth.Contracts.Business.Strategies;
 using SimpleAuth.Contracts.Data;
 using SimpleAuth.Data;
 using SimpleAuth.PasswordHasherRfc2898;
+using System;
 using System.Text;
 
 namespace SimpleAuth.Api
@@ -97,14 +100,27 @@ namespace SimpleAuth.Api
             services.AddScoped<IRoleBusiness, RoleBusiness>();
             services.AddScoped<IUserRoleBusiness, UserRoleBusiness>();
             services.AddScoped<IChangePasswordBusiness, ChangePasswordBusiness>();
+            services.AddScoped<IPasswordHistoryBusiness>(s => new PasswordHistoryBusiness(s.GetRequiredService<IPasswordHistoryData>(), appSettings.PasswordChangeHistoryRule));
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IAuthenticationBusiness, AuthenticationBusiness>();
             services.AddScoped<IAuthorizationBusiness>(s => new AuthorizationBusiness(s.GetRequiredService<IUserData>(), tokenValidationParameters));
+            Enum.TryParse<PasswordChangeStrategies>(appSettings.PasswordChangeStrategy, out var passwordChangeStrategy);
+            switch (passwordChangeStrategy)
+            {
+                case PasswordChangeStrategies.ChangePasswordWithHistory:
+                    services.AddScoped<IChangePasswordStrategy, ChangePasswordWithHistoryStrategy>();
+                    break;
+                case PasswordChangeStrategies.Default:
+                default:
+                    services.AddScoped<IChangePasswordStrategy, ChangePasswordStrategy>();
+                    break;
+            }
 
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IRoleData, RoleData>();
             services.AddScoped<IUserRoleData, UserRoleData>();
             services.AddScoped<IChangePasswordData, ChangePasswordData>();
+            services.AddScoped<IPasswordHistoryData, PasswordHistoryData>();
 
             services.AddScoped<IRepository, PGRepository>();
 
