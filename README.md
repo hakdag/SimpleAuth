@@ -1,4 +1,4 @@
-https://github.com/hakdag/SimpleAuth/workflows/SimpleAuth/badge.svg
+![.github/workflows/dotnetcore.yml](https://github.com/hakdag/SimpleAuth/workflows/.github/workflows/dotnetcore.yml/badge.svg?branch=master)
  
 # SimpleAuth
 Dotnet Core Based Simple Authentication & Authorization
