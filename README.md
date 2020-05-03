@@ -1,4 +1,4 @@
-![.github/workflows/dotnetcore.yml](https://github.com/hakdag/SimpleAuth/workflows/.github/workflows/dotnetcore.yml/badge.svg?branch=master)
+![.NET Core](https://github.com/hakdag/SimpleAuth/workflows/.NET%20Core/badge.svg?branch=master&event=push)
  
 # SimpleAuth
 Dotnet Core Based Simple Authentication & Authorization
