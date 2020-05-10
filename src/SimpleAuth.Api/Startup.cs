@@ -105,7 +105,7 @@ namespace SimpleAuth.Api
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<ILockAccountBusiness, LockAccountBusiness>();
             services.AddScoped<IAuthenticationBusiness, AuthenticationBusiness>();
-            services.AddScoped<IAuthorizationBusiness>(s => new AuthorizationBusiness(s.GetRequiredService<IUserData>(), tokenValidationParameters));
+            services.AddScoped<IAuthorizationBusiness>(s => new AuthorizationBusiness(s.GetRequiredService<IUserData>(), tokenValidationParameters, s.GetRequiredService<ILockAccountBusiness>()));
             Enum.TryParse<PasswordChangeStrategies>(appSettings.PasswordChangeStrategy, out var passwordChangeStrategy);
             switch (passwordChangeStrategy)
             {
