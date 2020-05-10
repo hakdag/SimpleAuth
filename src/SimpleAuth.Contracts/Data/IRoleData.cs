@@ -9,10 +9,10 @@ namespace SimpleAuth.Contracts.Data
     {
         Task<IEnumerable<Role>> GetAll();
         Task<ResponseResult> Create(string Name);
-        Task<ResponseResult> Update(int roleId, string newRoleName);
-        Task<ResponseResult> Delete(int id);
+        Task<ResponseResult> Update(long roleId, string newRoleName);
+        Task<ResponseResult> Delete(long id);
         Task<Role> GetByRoleName(string Name);
-        Task<Role> GetById(int roleId);
+        Task<Role> GetById(long roleId);
         Task<Role[]> GetUserRoles(User user);
         Task SetUsersRoles(User[] users);
     }

@@ -34,13 +34,12 @@ namespace SimpleAuth.Business
 
         public async Task<ResponseResult> ChangePassword(string userName, string oldPassword, string password)
         {
-            // check is username exists
+            // check if username exists
             var user = await userBusiness.GetByUserName(userName);
             if (user == null)
             {
                 return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UserDoesNotExist } };
             }
-
 
             // check old password correct or not
             var checkResult = passwordHasher.Check(user.Password, oldPassword);

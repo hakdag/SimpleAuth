@@ -1,9 +1,9 @@
 ﻿using SimpleAuth.Common;
 using System.Threading.Tasks;
 
-namespace SimpleAuth.Contracts.Business
+namespace SimpleAuth.Contracts.Data
 {
-    public interface ILockAccountBusiness
+    public interface ILockAccountData
     {
         Task<ResponseResult> LockAccount(long userId);
         Task<ResponseResult> UnLockAccount(long userId);

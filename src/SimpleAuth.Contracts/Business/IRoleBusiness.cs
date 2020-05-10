@@ -8,8 +8,9 @@ namespace SimpleAuth.Contracts.Business
     public interface IRoleBusiness
     {
         Task<IEnumerable<Role>> GetAll();
+        Task<Role> Get(long id);
         Task<ResponseResult> Create(string Name);
-        Task<ResponseResult> Update(int roleId, string newRoleName);
-        Task<ResponseResult> Delete(int id);
+        Task<ResponseResult> Update(long roleId, string newRoleName);
+        Task<ResponseResult> Delete(long id);
     }
 }

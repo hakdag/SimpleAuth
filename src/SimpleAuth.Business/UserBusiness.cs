@@ -26,6 +26,8 @@ namespace SimpleAuth.Business
 
         public async Task<User> GetByUserName(string userName) => await data.GetByUserName(userName);
 
+        public async Task<User> Get(long userId) => await data.GetById(userId);
+
         public async Task<ResponseResult> Create(string userName, string password)
         {
             // check is username exists
@@ -40,7 +42,7 @@ namespace SimpleAuth.Business
             return response;
         }
 
-        public async Task<ResponseResult> Update(int id, string newUserName)
+        public async Task<ResponseResult> Update(long id, string newUserName)
         {
             // check if user exists
             var existingUser = await data.GetById(id);
@@ -62,6 +64,6 @@ namespace SimpleAuth.Business
 
         public async Task UserLoggedIn(User user, string token) => await data.UserLoggedIn(user, token, DateTime.Now);
 
-        public async Task<ResponseResult> Delete(int id) => await data.Delete(id);
+        public async Task<ResponseResult> Delete(long id) => await data.Delete(id);
     }
 }

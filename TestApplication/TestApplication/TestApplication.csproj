@@ -6,9 +6,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.5.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="SimpleAuthExtensions" Version="0.1.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SimpleAuthExtensions">
+      <HintPath>..\..\..\SimpleAuth.Extensions\src\SimpleAuthExtensions\SimpleAuthExtensions\bin\Debug\netcoreapp3.1\SimpleAuthExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 

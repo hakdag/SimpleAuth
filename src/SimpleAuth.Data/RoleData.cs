@@ -36,7 +36,7 @@ namespace SimpleAuth.Data
             return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_CreateRoleError } };
         }
 
-        public async Task<ResponseResult> Update(int roleId, string newRoleName)
+        public async Task<ResponseResult> Update(long roleId, string newRoleName)
         {
             var UpdatedDate = DateTime.Now;
             var result = await Execute("UPDATE public.role SET name = @newRoleName, updateddate = @UpdatedDate WHERE id = @roleId", new { roleId, newRoleName, UpdatedDate });
@@ -48,7 +48,7 @@ namespace SimpleAuth.Data
             return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UpdateRoleError } };
         }
 
-        public async Task<ResponseResult> Delete(int id)
+        public async Task<ResponseResult> Delete(long id)
         {
             var result = await Execute("UPDATE public.role SET isdeleted = true WHERE id = @id", new { id });
             if (result > 0)
@@ -59,7 +59,7 @@ namespace SimpleAuth.Data
             return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_DeleteRoleError } };
         }
 
-        public async Task<Role> GetById(int roleId)
+        public async Task<Role> GetById(long roleId)
         {
             var roles = await RunQuery("SELECT id, name FROM public.role where id = @roleId and isdeleted <> true", new { roleId });
             return roles.FirstOrDefault();

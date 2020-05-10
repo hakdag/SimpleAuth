@@ -123,6 +123,7 @@ namespace SimpleAuth.Api
             services.AddScoped<IUserRoleData, UserRoleData>();
             services.AddScoped<IChangePasswordData, ChangePasswordData>();
             services.AddScoped<IPasswordHistoryData, PasswordHistoryData>();
+            services.AddScoped<ILockAccountData, LockAccountData>();
 
             services.AddScoped<IRepository, PGRepository>();
 

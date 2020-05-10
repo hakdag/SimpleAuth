@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Api.Controllers
 {
-    [Route("api/userrole")]
     [ApiController]
     public class UserRoleController : ControllerBase
     {
@@ -20,7 +19,8 @@ namespace SimpleAuth.Api.Controllers
 
         [HttpPost]
         [ValidateModel]
-        public async Task<ActionResult<ResponseResult>> Post([FromBody] UserRoleVM model)
+        [Route("api/userrole/addusertorole")]
+        public async Task<ActionResult<ResponseResult>> AddUserToRole([FromBody] UserRoleVM model)
         {
             var response = await business.Create(model.UserId, model.RoleId);
             return Ok(response);
@@ -28,7 +28,8 @@ namespace SimpleAuth.Api.Controllers
 
         [HttpDelete]
         [ValidateModel]
-        public async Task<ActionResult<ResponseResult>> Delete([FromBody] UserRoleVM model)
+        [Route("api/userrole/removeuserfromrole")]
+        public async Task<ActionResult<ResponseResult>> RemoveUserFromRole([FromBody] UserRoleVM model)
         {
             var response = await business.Delete(model.UserId, model.RoleId);
             return Ok(response);

@@ -2,6 +2,6 @@
 {
     public class LockAccountVM
     {
-        public int UserId { get; set; }
+        public long UserId { get; set; }
     }
 }

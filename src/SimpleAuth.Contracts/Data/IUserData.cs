@@ -10,10 +10,10 @@ namespace SimpleAuth.Contracts.Data
     {
         Task<IEnumerable<User>> GetAll();
         Task<User> GetByUserName(string userName);
-        Task<User> GetById(int userId);
+        Task<User> GetById(long userId);
         Task<ResponseResult> Create(string userName, string passwordHash);
         Task UserLoggedIn(User user, string token, DateTime lastLoginDate);
-        Task<ResponseResult> Delete(int id);
-        Task<ResponseResult> Update(int id, string newUserName);
+        Task<ResponseResult> Delete(long id);
+        Task<ResponseResult> Update(long id, string newUserName);
     }
 }

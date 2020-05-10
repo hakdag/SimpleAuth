@@ -21,6 +21,8 @@ namespace SimpleAuth.Business
 
         public async Task<IEnumerable<Role>> GetAll() => await data.GetAll();
 
+        public async Task<Role> Get(long id) => await data.GetById(id);
+
         public async Task<ResponseResult> Create(string Name)
         {
             // check is username exists
@@ -34,7 +36,7 @@ namespace SimpleAuth.Business
             return response;
         }
 
-        public async Task<ResponseResult> Update(int roleId, string newRoleName)
+        public async Task<ResponseResult> Update(long roleId, string newRoleName)
         {
             // check if role  exists
             var existingRole = await data.GetById(roleId);
@@ -54,7 +56,7 @@ namespace SimpleAuth.Business
             return response;
         }
 
-        public async Task<ResponseResult> Delete(int id)
+        public async Task<ResponseResult> Delete(long id)
         {
             // check if role  exists
             var existingRole = await data.GetById(id);

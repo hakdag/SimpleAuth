@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Api.Controllers
 {
-    [Route("api/role/{id?}")]
     [ApiController]
     public class RolesController : ControllerBase
     {
@@ -23,16 +22,27 @@ namespace SimpleAuth.Api.Controllers
         }
 
         // TODO: Add pagination
-        public async Task<ActionResult<List<RoleVM>>> Get()
+        [HttpGet]
+        [Route("api/role/getall")]
+        public async Task<ActionResult<List<RoleVM>>> GetAll()
         {
             var roles = await business.GetAll();
             var roleVMs = mapper.Map<List<RoleVM>>(roles);
             return Ok(roleVMs);
         }
 
+        [HttpGet]
+        [Route("api/role/get/{id}")]
+        public async Task<ActionResult<RoleVM>> Get(long id)
+        {
+            var role = await business.Get(id);
+            return Ok(role);
+        }
+
         [HttpPost]
         [ValidateModel]
-        public async Task<ActionResult<ResponseResult>> Post([FromBody] CreateRoleVM model)
+        [Route("api/role/create")]
+        public async Task<ActionResult<ResponseResult>> Create([FromBody] CreateRoleVM model)
         {
             var response = await business.Create(model.Name);
             return Ok(response);
@@ -40,14 +50,16 @@ namespace SimpleAuth.Api.Controllers
 
         [HttpPut]
         [ValidateModel]
-        public async Task<ActionResult<ResponseResult>> Put([FromBody] UpdateRoleVM model)
+        [Route("api/role/update")]
+        public async Task<ActionResult<ResponseResult>> Update([FromBody] UpdateRoleVM model)
         {
             var response = await business.Update(model.RoleId, model.NewRoleName);
             return Ok(response);
         }
 
         [HttpDelete]
-        public async Task<ActionResult<ResponseResult>> Delete(int id)
+        [Route("api/role/delete/{id}")]
+        public async Task<ActionResult<ResponseResult>> Delete(long id)
         {
             var response = await business.Delete(id);
             return Ok(response);
