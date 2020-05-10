@@ -9,9 +9,10 @@ namespace SimpleAuth.Contracts.Business
     {
         Task<IEnumerable<User>> GetAll();
         Task<User> GetByUserName(string userName);
+        Task<User> Get(long userId);
         Task<ResponseResult> Create(string userName, string password);
         Task UserLoggedIn(User user, string token);
-        Task<ResponseResult> Delete(int id);
-        Task<ResponseResult> Update(int id, string newUserName);
+        Task<ResponseResult> Delete(long id);
+        Task<ResponseResult> Update(long id, string newUserName);
     }
 }

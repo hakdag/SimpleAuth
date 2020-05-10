@@ -60,3 +60,18 @@ CREATE TABLE public.passwordhistory (
 	userid int8 NOT NULL,
 	passwordhash varchar NOT NULL
 );
+
+-- public.useraccountlock definition
+
+-- Drop table
+
+-- DROP TABLE public.useraccountlock;
+
+CREATE TABLE public.useraccountlock (
+	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	createddate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updateddate timestamp NULL,
+	isdeleted bool NOT NULL DEFAULT false,
+	userid int8 NOT NULL
+);
+CREATE UNIQUE INDEX useraccountlock_userid_idx ON public.useraccountlock USING btree (userid);

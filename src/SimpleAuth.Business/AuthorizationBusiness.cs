@@ -12,11 +12,16 @@ namespace SimpleAuth.Business
     {
         private readonly IUserData userData;
         private readonly TokenValidationParameters tokenValidationParameters;
+        private readonly ILockAccountBusiness lockAccountBusiness;
 
-        public AuthorizationBusiness(IUserData userData, TokenValidationParameters tokenValidationParameters)
+        public AuthorizationBusiness(
+            IUserData userData,
+            TokenValidationParameters tokenValidationParameters,
+            ILockAccountBusiness lockAccountBusiness)
         {
             this.userData = userData;
             this.tokenValidationParameters = tokenValidationParameters;
+            this.lockAccountBusiness = lockAccountBusiness;
         }
 
         public async Task<AuthorizationResult> ValidateToken(string token)
@@ -49,7 +54,11 @@ namespace SimpleAuth.Business
                     return new AuthorizationResult { IsAuthorized = false };
                 }
 
-                // TODO: check account lock
+                var lockCheck = await lockAccountBusiness.CheckUser(user.Id);
+                if (!lockCheck.Success)
+                {
+                    return new AuthorizationResult { IsAuthorized = false };
+                }
 
                 return new AuthorizationResult
                 {

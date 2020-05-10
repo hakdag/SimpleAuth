@@ -17,15 +17,18 @@ namespace SimpleAuth.Business
         private readonly AppSettings appSettings;
         private readonly IPasswordHasher passwordHasher;
         private readonly IUserBusiness userService;
+        private readonly ILockAccountBusiness lockAccountBusiness;
 
         public AuthenticationBusiness(
             IOptions<AppSettings> appSettings,
             IPasswordHasher passwordHasher,
-            IUserBusiness userService)
+            IUserBusiness userService,
+            ILockAccountBusiness lockAccountBusiness)
         {
             this.appSettings = appSettings.Value;
             this.passwordHasher = passwordHasher;
             this.userService = userService;
+            this.lockAccountBusiness = lockAccountBusiness;
         }
 
         public async Task<AuthenticationToken> Authenticate(string username, string password)
@@ -34,6 +37,12 @@ namespace SimpleAuth.Business
             if (user == null)
             {
                 return null;
+            }
+
+            var lockCheck = await lockAccountBusiness.CheckUser(user.Id);
+            if (!lockCheck.Success)
+            {
+                return new AuthenticationToken { lockstatus = true, lockmessage = lockCheck.Messages[0] };
             }
 
             var checkResult = passwordHasher.Check(user.Password, password);
