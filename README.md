@@ -28,6 +28,9 @@ Why to build same thing over and over again? Purpose of this project is to build
  - JWT Authentication
  - Users
  - Roles
+ - Lock/Unlock user account
+ - Password Reset
+ - Limited login attempts
 
 ## Contributing
 
