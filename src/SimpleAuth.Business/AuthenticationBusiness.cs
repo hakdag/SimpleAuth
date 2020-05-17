@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
+using SimpleAuth.Contracts.Business.Strategies;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,17 +19,26 @@ namespace SimpleAuth.Business
         private readonly IPasswordHasher passwordHasher;
         private readonly IUserBusiness userService;
         private readonly ILockAccountBusiness lockAccountBusiness;
+        private readonly IAuthenticateAttemptBusiness authenticateAttemptBusiness;
+        private readonly IAuthenticateAttempsStrategy authenticateAttempsStrategy;
+        private readonly ITokenGenerationBusiness tokenGenerationBusiness;
 
         public AuthenticationBusiness(
             IOptions<AppSettings> appSettings,
             IPasswordHasher passwordHasher,
             IUserBusiness userService,
-            ILockAccountBusiness lockAccountBusiness)
+            ILockAccountBusiness lockAccountBusiness,
+            IAuthenticateAttemptBusiness authenticateAttemptBusiness,
+            IAuthenticateAttempsStrategy authenticateAttempsStrategy,
+            ITokenGenerationBusiness tokenGenerationBusiness)
         {
             this.appSettings = appSettings.Value;
             this.passwordHasher = passwordHasher;
             this.userService = userService;
             this.lockAccountBusiness = lockAccountBusiness;
+            this.authenticateAttemptBusiness = authenticateAttemptBusiness;
+            this.authenticateAttempsStrategy = authenticateAttempsStrategy;
+            this.tokenGenerationBusiness = tokenGenerationBusiness;
         }
 
         public async Task<AuthenticationToken> Authenticate(string username, string password)
@@ -42,40 +52,20 @@ namespace SimpleAuth.Business
             var lockCheck = await lockAccountBusiness.CheckUser(user.Id);
             if (!lockCheck.Success)
             {
-                return new AuthenticationToken { lockstatus = true, lockmessage = lockCheck.Messages[0] };
+                return new AuthenticationToken { islocked = true, message = lockCheck.Messages[0] };
             }
 
-            var checkResult = passwordHasher.Check(user.Password, password);
-            if (!checkResult.Verified)
+            var attemptResult = await authenticateAttempsStrategy.Check(user.Id, user.Password, password);
+            if (!attemptResult.Verified)
             {
-                return null;
+                return attemptResult.UnverifiedAttempt;
             }
 
             // authentication successful so generate jwt token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName)
-            };
-            claims.AddRange(user.Roles.Select(role => new Claim(ClaimTypes.Role, role.Name)));
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-            var token = tokenHandler.WriteToken(securityToken);
-            var authenticationToken = new AuthenticationToken
-            {
-                token = token,
-                username = username,
-                expires = tokenDescriptor.Expires.Value
-            };
+            var authenticationToken = tokenGenerationBusiness.Generate(user, appSettings.Secret);
 
             // update user login date and token fields
-            await userService.UserLoggedIn(user, token);
+            await userService.UserLoggedIn(user, authenticationToken.token);
 
             return authenticationToken;
         }

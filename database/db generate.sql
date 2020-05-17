@@ -75,3 +75,18 @@ CREATE TABLE public.useraccountlock (
 	userid int8 NOT NULL
 );
 CREATE UNIQUE INDEX useraccountlock_userid_idx ON public.useraccountlock USING btree (userid);
+
+-- public.authenticateattempt definition
+
+-- Drop table
+
+-- DROP TABLE public.authenticateattempt;
+
+CREATE TABLE public.authenticateattempt (
+	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	createddate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updateddate timestamp NULL,
+	isdeleted bool NOT NULL DEFAULT false,
+	userid int8 NOT NULL
+);
+

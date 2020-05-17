@@ -37,7 +37,8 @@ namespace SimpleAuth.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvc(options => { options.Filters.Add<ValidateModelAttribute>(); })
+                .AddMvc(options => options.Filters.Add<ValidateModelAttribute>())
+                .AddJsonOptions(options => options.JsonSerializerOptions.IgnoreNullValues = true)
                 .AddFluentValidation(opt => { opt.RegisterValidatorsFromAssemblyContaining<Startup>(); });
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
             services.AddCors();
@@ -105,6 +106,8 @@ namespace SimpleAuth.Api
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<ILockAccountBusiness, LockAccountBusiness>();
             services.AddScoped<IAuthenticationBusiness, AuthenticationBusiness>();
+            services.AddScoped<IAuthenticateAttemptBusiness>(s => new AuthenticateAttemptBusiness(appSettings.RemainingAttemptsCount, s.GetRequiredService<IAuthenticateAttemptData>()));
+            services.AddScoped<ITokenGenerationBusiness, TokenGenerationBusiness>();
             services.AddScoped<IAuthorizationBusiness>(s => new AuthorizationBusiness(s.GetRequiredService<IUserData>(), tokenValidationParameters, s.GetRequiredService<ILockAccountBusiness>()));
             Enum.TryParse<PasswordChangeStrategies>(appSettings.PasswordChangeStrategy, out var passwordChangeStrategy);
             switch (passwordChangeStrategy)
@@ -117,6 +120,17 @@ namespace SimpleAuth.Api
                     services.AddScoped<IChangePasswordStrategy, ChangePasswordStrategy>();
                     break;
             }
+            Enum.TryParse<AuthenticateAttemptStrategies>(appSettings.AuthenticateAttemptStrategy, out var authenticateAttemptStrategy);
+            switch (authenticateAttemptStrategy)
+            {
+                case AuthenticateAttemptStrategies.UseAuthenticateAttempt:
+                    services.AddScoped<IAuthenticateAttempsStrategy, AuthenticateWithRemainingAttempsStrategy>();
+                    break;
+                case AuthenticateAttemptStrategies.Default:
+                default:
+                    services.AddScoped<IAuthenticateAttempsStrategy, AuthenticateWithUnlimitedAttempsStrategy>();
+                    break;
+            }
 
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IRoleData, RoleData>();
@@ -124,6 +138,7 @@ namespace SimpleAuth.Api
             services.AddScoped<IChangePasswordData, ChangePasswordData>();
             services.AddScoped<IPasswordHistoryData, PasswordHistoryData>();
             services.AddScoped<ILockAccountData, LockAccountData>();
+            services.AddScoped<IAuthenticateAttemptData, AuthenticateAttemptData>();
 
             services.AddScoped<IRepository, PGRepository>();
 

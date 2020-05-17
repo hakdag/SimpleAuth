@@ -9,13 +9,18 @@ namespace SimpleAuth.Business
     public class LockAccountBusiness : ILockAccountBusiness
     {
         private readonly ILockAccountData data;
+        private readonly IAuthenticateAttemptBusiness authenticateAttemptBusiness;
         private readonly IUserBusiness userBusiness;
 
         public readonly string ErrorMessage_UserDoesNotExist = "User does not exist.";
 
-        public LockAccountBusiness(ILockAccountData data, IUserBusiness userBusiness)
+        public LockAccountBusiness(
+            ILockAccountData data,
+            IAuthenticateAttemptBusiness authenticateAttemptBusiness,
+            IUserBusiness userBusiness)
         {
             this.data = data;
+            this.authenticateAttemptBusiness = authenticateAttemptBusiness;
             this.userBusiness = userBusiness;
         }
 
@@ -39,6 +44,8 @@ namespace SimpleAuth.Business
             {
                 return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UserDoesNotExist } };
             }
+
+            await authenticateAttemptBusiness.ResetRemainingAttempts(userId);
 
             return await data.UnLockAccount(userId);
         }
