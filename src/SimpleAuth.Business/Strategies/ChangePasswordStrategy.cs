@@ -10,14 +10,8 @@ namespace SimpleAuth.Business.Strategies
     {
         private readonly IChangePasswordData changePasswordData;
 
-        public ChangePasswordStrategy(IChangePasswordData changePasswordData)
-        {
-            this.changePasswordData = changePasswordData;
-        }
+        public ChangePasswordStrategy(IChangePasswordData changePasswordData) => this.changePasswordData = changePasswordData;
 
-        public async Task<ResponseResult> UpdatePassword(User user, string passwordHash)
-        {
-            return await changePasswordData.Update(user.Id, passwordHash);
-        }
+        public async Task<ResponseResult> UpdatePassword(User user, string passwordHash) => await changePasswordData.Update(user.Id, passwordHash);
     }
 }

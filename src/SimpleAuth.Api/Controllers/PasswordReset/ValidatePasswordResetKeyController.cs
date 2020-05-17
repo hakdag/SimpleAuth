@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleAuth.Api.Filters;
-using SimpleAuth.Api.Models;
+using SimpleAuth.Api.Models.PasswordReset;
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business.PasswordReset;
 using System.Threading.Tasks;

@@ -10,7 +10,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SimpleAuth.Api.Filters;
 using SimpleAuth.Api.Models;
+using SimpleAuth.Api.Models.PasswordReset;
 using SimpleAuth.Api.Validators;
+using SimpleAuth.Api.Validators.PasswordReset;
 using SimpleAuth.Business;
 using SimpleAuth.Business.PasswordReset;
 using SimpleAuth.Business.Strategies;
@@ -103,6 +105,7 @@ namespace SimpleAuth.Api
             services.AddTransient<IValidator<LockAccountVM>, LockAccountValidator>();
             services.AddTransient<IValidator<GeneratePasswordResetKeyVM>, GeneratePasswordResetKeyValidator>();
             services.AddTransient<IValidator<ValidatePasswordResetKeyVM>, ValidatePasswordResetKeyValidator>();
+            services.AddTransient<IValidator<PasswordResetVM>, PasswordResetValidator>();
 
             services.AddScoped<IUserBusiness, UserBusiness>();
             services.AddScoped<IRoleBusiness, RoleBusiness>();
@@ -139,6 +142,7 @@ namespace SimpleAuth.Api
             }
             services.AddScoped<IGeneratePasswordResetKeyBusiness, GeneratePasswordResetKeyBusiness>();
             services.AddScoped<IValidatePasswordResetKeyBusiness, ValidatePasswordResetKeyBusiness>();
+            services.AddScoped<IPasswordResetBusiness, PasswordResetBusiness>();
 
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IRoleData, RoleData>();

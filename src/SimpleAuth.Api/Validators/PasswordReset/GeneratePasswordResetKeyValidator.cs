@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using SimpleAuth.Api.Models;
+using SimpleAuth.Api.Models.PasswordReset;
 
-namespace SimpleAuth.Api.Validators
+namespace SimpleAuth.Api.Validators.PasswordReset
 {
     public class GeneratePasswordResetKeyValidator : AbstractValidator<GeneratePasswordResetKeyVM>
     {

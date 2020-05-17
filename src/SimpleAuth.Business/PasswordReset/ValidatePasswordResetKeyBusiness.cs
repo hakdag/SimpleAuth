@@ -1,4 +1,5 @@
 ﻿using SimpleAuth.Common;
+using SimpleAuth.Common.Entities;
 using SimpleAuth.Contracts.Business;
 using SimpleAuth.Contracts.Business.PasswordReset;
 using SimpleAuth.Contracts.Data.PasswordReset;
@@ -29,6 +30,11 @@ namespace SimpleAuth.Business.PasswordReset
                 return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UserDoesNotExist } };
             }
 
+            return await Validate(user, resetKey);
+        }
+
+        public async Task<ResponseResult> Validate(User user, string resetKey)
+        {
             var passwordResetKey = await data.Get(user.Id, resetKey);
             if (passwordResetKey == null)
             {

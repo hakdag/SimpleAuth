@@ -1,4 +1,4 @@
-﻿namespace SimpleAuth.Api.Models
+﻿namespace SimpleAuth.Api.Models.PasswordReset
 {
     public class ValidatePasswordResetKeyVM
     {

@@ -1,17 +1,12 @@
 ﻿using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
 using SimpleAuth.Contracts.Business.Strategies;
-using SimpleAuth.Contracts.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SimpleAuth.Business
 {
     public class ChangePasswordBusiness : IChangePasswordBusiness
     {
-        private readonly IChangePasswordData data;
         private readonly IChangePasswordStrategy changePasswordStrategy;
         private readonly IUserBusiness userBusiness;
         private readonly IPasswordHasher passwordHasher;
@@ -21,12 +16,10 @@ namespace SimpleAuth.Business
         public readonly string ErrorMessage_NewPasswordCannotBeSame = "New password cannot be same as the old one.";
 
         public ChangePasswordBusiness(
-            IChangePasswordData data,
             IChangePasswordStrategy changePasswordStrategy,
             IUserBusiness userBusiness,
             IPasswordHasher passwordHasher)
         {
-            this.data = data;
             this.changePasswordStrategy = changePasswordStrategy;
             this.userBusiness = userBusiness;
             this.passwordHasher = passwordHasher;
