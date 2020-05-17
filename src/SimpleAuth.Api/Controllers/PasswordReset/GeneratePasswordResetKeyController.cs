@@ -7,16 +7,13 @@ using System.Threading.Tasks;
 
 namespace SimpleAuth.Api.Controllers.PasswordReset
 {
-    [Route("api/generatepasswordresetkey")]
+    [Route("api/passwordreset/generatekey")]
     [ApiController]
     public class GeneratePasswordResetKeyController : ControllerBase
     {
         private readonly IGeneratePasswordResetKeyBusiness business;
 
-        public GeneratePasswordResetKeyController(IGeneratePasswordResetKeyBusiness business)
-        {
-            this.business = business;
-        }
+        public GeneratePasswordResetKeyController(IGeneratePasswordResetKeyBusiness business) => this.business = business;
 
         [HttpPost]
         [ValidateModel]

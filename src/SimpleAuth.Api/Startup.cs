@@ -102,6 +102,7 @@ namespace SimpleAuth.Api
             services.AddTransient<IValidator<ChangePasswordVM>, ChangePasswordValidator>();
             services.AddTransient<IValidator<LockAccountVM>, LockAccountValidator>();
             services.AddTransient<IValidator<GeneratePasswordResetKeyVM>, GeneratePasswordResetKeyValidator>();
+            services.AddTransient<IValidator<ValidatePasswordResetKeyVM>, ValidatePasswordResetKeyValidator>();
 
             services.AddScoped<IUserBusiness, UserBusiness>();
             services.AddScoped<IRoleBusiness, RoleBusiness>();
@@ -137,6 +138,7 @@ namespace SimpleAuth.Api
                     break;
             }
             services.AddScoped<IGeneratePasswordResetKeyBusiness, GeneratePasswordResetKeyBusiness>();
+            services.AddScoped<IValidatePasswordResetKeyBusiness, ValidatePasswordResetKeyBusiness>();
 
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IRoleData, RoleData>();
@@ -145,7 +147,7 @@ namespace SimpleAuth.Api
             services.AddScoped<IPasswordHistoryData, PasswordHistoryData>();
             services.AddScoped<ILockAccountData, LockAccountData>();
             services.AddScoped<IAuthenticateAttemptData, AuthenticateAttemptData>();
-            services.AddScoped<IGeneratePasswordResetKeyData, GeneratePasswordResetKeyData>();
+            services.AddScoped<IPasswordResetData, PasswordResetData>();
 
             services.AddScoped<IRepository, PGRepository>();
 

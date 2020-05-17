@@ -13,6 +13,8 @@ namespace SimpleAuth.Data
 
         protected async Task<IEnumerable<T>> RunQuery(string sql, object param = null) => await Repository.Connection.QueryAsync<T>(sql, param);
 
+        protected async Task<T> RunQueryFirst(string sql, object param = null) => await Repository.Connection.QueryFirstOrDefaultAsync<T>(sql, param);
+
         protected async Task<int> Execute(string sql, object param = null) => await Repository.Connection.ExecuteAsync(sql, param);
     }
 }

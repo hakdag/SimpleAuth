@@ -9,12 +9,12 @@ namespace SimpleAuth.Business.PasswordReset
 {
     public class GeneratePasswordResetKeyBusiness : IGeneratePasswordResetKeyBusiness
     {
-        private readonly IGeneratePasswordResetKeyData data;
+        private readonly IPasswordResetData data;
         private readonly IUserBusiness userBusiness;
 
         public readonly string ErrorMessage_UserDoesNotExist = "User does not exist.";
 
-        public GeneratePasswordResetKeyBusiness(IGeneratePasswordResetKeyData data, IUserBusiness userBusiness)
+        public GeneratePasswordResetKeyBusiness(IPasswordResetData data, IUserBusiness userBusiness)
         {
             this.data = data;
             this.userBusiness = userBusiness;
