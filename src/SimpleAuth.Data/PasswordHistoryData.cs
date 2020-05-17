@@ -1,7 +1,6 @@
 ﻿using SimpleAuth.Common;
 using SimpleAuth.Common.Entities;
 using SimpleAuth.Contracts.Data;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

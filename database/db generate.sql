@@ -90,3 +90,18 @@ CREATE TABLE public.authenticateattempt (
 	userid int8 NOT NULL
 );
 
+-- public.passwordresetkey definition
+
+-- Drop table
+
+-- DROP TABLE public.passwordresetkey;
+
+CREATE TABLE public.passwordresetkey (
+	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	createddate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updateddate timestamp NULL,
+	isdeleted bool NOT NULL DEFAULT false,
+	userid int8 NOT NULL,
+	resetkey varchar NOT NULL
+);
+

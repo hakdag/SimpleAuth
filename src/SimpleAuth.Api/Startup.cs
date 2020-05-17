@@ -10,14 +10,20 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SimpleAuth.Api.Filters;
 using SimpleAuth.Api.Models;
+using SimpleAuth.Api.Models.PasswordReset;
 using SimpleAuth.Api.Validators;
+using SimpleAuth.Api.Validators.PasswordReset;
 using SimpleAuth.Business;
+using SimpleAuth.Business.PasswordReset;
 using SimpleAuth.Business.Strategies;
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
+using SimpleAuth.Contracts.Business.PasswordReset;
 using SimpleAuth.Contracts.Business.Strategies;
 using SimpleAuth.Contracts.Data;
+using SimpleAuth.Contracts.Data.PasswordReset;
 using SimpleAuth.Data;
+using SimpleAuth.Data.PasswordReset;
 using SimpleAuth.PasswordHasherRfc2898;
 using System;
 using System.Text;
@@ -97,6 +103,9 @@ namespace SimpleAuth.Api
             services.AddTransient<IValidator<UserRoleVM>, UserRoleValidator>();
             services.AddTransient<IValidator<ChangePasswordVM>, ChangePasswordValidator>();
             services.AddTransient<IValidator<LockAccountVM>, LockAccountValidator>();
+            services.AddTransient<IValidator<GeneratePasswordResetKeyVM>, GeneratePasswordResetKeyValidator>();
+            services.AddTransient<IValidator<ValidatePasswordResetKeyVM>, ValidatePasswordResetKeyValidator>();
+            services.AddTransient<IValidator<PasswordResetVM>, PasswordResetValidator>();
 
             services.AddScoped<IUserBusiness, UserBusiness>();
             services.AddScoped<IRoleBusiness, RoleBusiness>();
@@ -131,6 +140,9 @@ namespace SimpleAuth.Api
                     services.AddScoped<IAuthenticateAttempsStrategy, AuthenticateWithUnlimitedAttempsStrategy>();
                     break;
             }
+            services.AddScoped<IGeneratePasswordResetKeyBusiness, GeneratePasswordResetKeyBusiness>();
+            services.AddScoped<IValidatePasswordResetKeyBusiness, ValidatePasswordResetKeyBusiness>();
+            services.AddScoped<IPasswordResetBusiness, PasswordResetBusiness>();
 
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IRoleData, RoleData>();
@@ -139,6 +151,7 @@ namespace SimpleAuth.Api
             services.AddScoped<IPasswordHistoryData, PasswordHistoryData>();
             services.AddScoped<ILockAccountData, LockAccountData>();
             services.AddScoped<IAuthenticateAttemptData, AuthenticateAttemptData>();
+            services.AddScoped<IPasswordResetData, PasswordResetData>();
 
             services.AddScoped<IRepository, PGRepository>();
 

@@ -1,18 +1,19 @@
 ﻿using FluentValidation;
-using SimpleAuth.Api.Models;
+using SimpleAuth.Api.Models.PasswordReset;
 using System;
 
-namespace SimpleAuth.Api.Validators
+namespace SimpleAuth.Api.Validators.PasswordReset
 {
-    public class CreateUserValidator : AbstractValidator<CreateUserVM>
+    public class PasswordResetValidator : AbstractValidator<PasswordResetVM>
     {
-        public CreateUserValidator()
+        public PasswordResetValidator()
         {
             RuleFor(m => m.UserName)
                 .NotNull()
-                .NotEmpty()
-                .MinimumLength(3)
-                .MaximumLength(20);
+                .NotEmpty();
+            RuleFor(m => m.ResetKey)
+                .NotNull()
+                .NotEmpty();
             RuleFor(m => m.Password)
                 .NotNull()
                 .NotEmpty()
