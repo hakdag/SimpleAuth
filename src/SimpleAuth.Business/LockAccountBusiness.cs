@@ -1,7 +1,6 @@
 ﻿using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
 using SimpleAuth.Contracts.Data;
-using System;
 using System.Threading.Tasks;
 
 namespace SimpleAuth.Business
@@ -12,7 +11,7 @@ namespace SimpleAuth.Business
         private readonly IAuthenticateAttemptBusiness authenticateAttemptBusiness;
         private readonly IUserBusiness userBusiness;
 
-        public readonly string ErrorMessage_UserDoesNotExist = "User does not exist.";
+        public readonly string ErrorMessage_UserDoesNotExist = "User with provided Id does not exist.";
 
         public LockAccountBusiness(
             ILockAccountData data,

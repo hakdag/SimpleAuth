@@ -46,6 +46,53 @@ CREATE TABLE public.userrole (
 	roleid int8 NOT NULL
 );
 
+-- public."permission" definition
+
+-- Drop table
+
+-- DROP TABLE public."permission";
+
+CREATE TABLE public."permission" (
+	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	createddate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updateddate timestamp NULL,
+	isdeleted bool NOT NULL DEFAULT false,
+	"name" varchar NOT NULL
+);
+CREATE UNIQUE INDEX permission_name_idx ON public.permission USING btree (name);
+
+-- public.rolepermission definition
+
+-- Drop table
+
+-- DROP TABLE public.rolepermission;
+
+CREATE TABLE public.rolepermission (
+	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	createddate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updateddate timestamp NULL,
+	isdeleted bool NOT NULL DEFAULT false,
+	roleid int8 NOT NULL,
+	permissionid int8 NOT NULL
+);
+CREATE UNIQUE INDEX rolepermission_roleid_idx ON public.rolepermission USING btree (roleid, permissionid);
+
+-- public.userpermission definition
+
+-- Drop table
+
+-- DROP TABLE public.userpermission;
+
+CREATE TABLE public.userpermission (
+	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	createddate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updateddate timestamp NULL,
+	isdeleted bool NOT NULL DEFAULT false,
+	userid int8 NOT NULL,
+	permissionid int8 NOT NULL
+);
+CREATE UNIQUE INDEX userpermission_userid_idx ON public.userpermission USING btree (userid, permissionid);
+
 -- public.passwordhistory definition
 
 -- Drop table

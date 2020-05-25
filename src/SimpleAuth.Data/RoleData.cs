@@ -14,15 +14,26 @@ namespace SimpleAuth.Data
         public readonly string ErrorMessage_CreateRoleError = "Error occured when creating the role.";
         public readonly string ErrorMessage_UpdateRoleError = "Error occured when updating the role.";
         public readonly string ErrorMessage_DeleteRoleError = "Error occured when deleting the role.";
+        private readonly IPermissionData permissionData;
 
-        public RoleData(IRepository repository) : base(repository) { }
+        public RoleData(IRepository repository, IPermissionData permissionData) : base(repository)
+        {
+            this.permissionData = permissionData;
+        }
 
         public async Task<IEnumerable<Role>> GetAll() => await RunQuery("SELECT id, name FROM public.role where isdeleted <> true");
 
         public async Task<Role> GetByRoleName(string name)
         {
-            var roles = await RunQuery("SELECT id, name FROM public.\"role\" where name = @name", new { name });
-            return roles.FirstOrDefault();
+            var role = await RunQueryFirst("SELECT id, name FROM public.\"role\" where name = @name", new { name });
+            if (role == null)
+            {
+                return null;
+            }
+
+            // get role permissions
+            role.Permissions = await permissionData.GetRolePermissions(role.Id);
+            return role;
         }
 
         public async Task<ResponseResult> Create(string name)
@@ -61,15 +72,20 @@ namespace SimpleAuth.Data
 
         public async Task<Role> GetById(long roleId)
         {
-            var roles = await RunQuery("SELECT id, name FROM public.role where id = @roleId and isdeleted <> true", new { roleId });
-            return roles.FirstOrDefault();
+            var role = await RunQueryFirst("SELECT id, name FROM public.role where id = @roleId and isdeleted <> true", new { roleId });
+            if (role == null)
+            {
+                return null;
+            }
+
+            // get role permissions
+            role.Permissions = await permissionData.GetRolePermissions(role.Id);
+            return role;
         }
 
         public async Task<Role[]> GetUserRoles(User user)
-        {
-            var roles = await RunQuery("select r.id, r.name from public.role r inner join public.userrole ur on r.id = ur.roleid where ur.userid = @userId and r.isdeleted <> true", new { userId = user.Id });
-            return roles.ToArray();
-        }
+            =>
+                await RunQueryAsArray("select r.id, r.name from public.role r inner join public.userrole ur on r.id = ur.roleid where ur.userid = @userId and r.isdeleted <> true", new { userId = user.Id });
 
         public async Task SetUsersRoles(User[] users)
         {

@@ -11,12 +11,16 @@ namespace SimpleAuth.Data
     public class UserData : BaseData<User>, IUserData
     {
         private readonly IRoleData roleData;
-
+        private readonly IPermissionData permissionData;
         public readonly string ErrorMessage_DeleteUserError = "Error occured when deleting the user.";
 
-        public UserData(IRepository repository, IRoleData roleData) : base(repository)
+        public UserData(
+            IRepository repository,
+            IRoleData roleData,
+            IPermissionData permissionData) : base(repository)
         {
             this.roleData = roleData;
+            this.permissionData = permissionData;
         }
 
         public async Task<IEnumerable<User>> GetAll()
@@ -31,8 +35,7 @@ namespace SimpleAuth.Data
         public async Task<User> GetByUserName(string userName)
         {
             // get user
-            var users = await RunQuery("SELECT id, username, password FROM public.\"user\" where username = @userName and isdeleted = false", new { userName });
-            var user = users.FirstOrDefault();
+            var user = await RunQueryFirst("SELECT id, username, password FROM public.\"user\" where username = @userName and isdeleted = false", new { userName });
             if (user == null)
             {
                 return null;
@@ -72,8 +75,19 @@ namespace SimpleAuth.Data
 
         public async Task<User> GetById(long userId)
         {
-            var users = await RunQuery("SELECT id, username FROM public.\"user\" where id = @userId and isdeleted = false", new { userId });
-            return users.FirstOrDefault();
+            // get user
+            var user = await RunQueryFirst("SELECT id, username FROM public.\"user\" where id = @userId and isdeleted = false", new { userId });
+            if (user == null)
+            {
+                return null;
+            }
+
+            // get user roles
+            user.Roles = await roleData.GetUserRoles(user);
+
+            // get user permissions
+            user.Permissions = await permissionData.GetUserPermissions(user);
+            return user;
         }
 
         public async Task<ResponseResult> Delete(long id)
