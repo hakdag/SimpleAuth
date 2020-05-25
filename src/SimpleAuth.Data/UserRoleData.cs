@@ -9,7 +9,7 @@ namespace SimpleAuth.Data
     public class UserRoleData : BaseData<UserRole>, IUserRoleData
     {
         public readonly string ErrorMessage_AssingError = "Error occured when assinging role to the user.";
-        public readonly string ErrorMessage_UnAssingError = "Error occured when assinging role to the user.";
+        public readonly string ErrorMessage_UnAssingError = "Error occured when unassinging role from the user.";
 
         public UserRoleData(IRepository repository) : base(repository) { }
 
@@ -36,10 +36,7 @@ namespace SimpleAuth.Data
         }
 
         public async Task<UserRole> Get(int userId, int roleId)
-        {
-            var userRoles = await RunQuery("SELECT id, userid, roleid FROM public.userrole where userid = @userId and roleid = @roleId", new { userId, roleId });
-            var userRole = userRoles.FirstOrDefault();
-            return userRole;
-        }
+            =>
+                await RunQueryFirst("SELECT id, userid, roleid FROM public.userrole where userid = @userId and roleid = @roleId", new { userId, roleId });
     }
 }

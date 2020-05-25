@@ -11,13 +11,10 @@ namespace SimpleAuth.Business
     {
         private readonly IRoleData data;
 
-        public readonly string ErrorMessage_RoleDoesNotExist = "Role does not exist.";
-        public readonly string ErrorMessage_RoleExists = "Specified role already exists.";
+        public readonly string ErrorMessage_RoleDoesNotExist = "Role with provided Id does not exist.";
+        public readonly string ErrorMessage_RoleExists = "Another role with same name already exists.";
 
-        public RoleBusiness(IRoleData data)
-        {
-            this.data = data;
-        }
+        public RoleBusiness(IRoleData data) => this.data = data;
 
         public async Task<IEnumerable<Role>> GetAll() => await data.GetAll();
 
@@ -25,7 +22,7 @@ namespace SimpleAuth.Business
 
         public async Task<ResponseResult> Create(string Name)
         {
-            // check is username exists
+            // check if rolename exists
             var existingRole = await data.GetByRoleName(Name);
             if (existingRole != null)
             {

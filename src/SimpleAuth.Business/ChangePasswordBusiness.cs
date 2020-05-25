@@ -11,7 +11,7 @@ namespace SimpleAuth.Business
         private readonly IUserBusiness userBusiness;
         private readonly IPasswordHasher passwordHasher;
 
-        public readonly string ErrorMessage_UserDoesNotExist = "User does not exist.";
+        public readonly string ErrorMessage_UserDoesNotExist = "User with provided Id does not exist.";
         public readonly string ErrorMessage_WrongPassword = "Password is wrong.";
         public readonly string ErrorMessage_NewPasswordCannotBeSame = "New password cannot be same as the old one.";
 

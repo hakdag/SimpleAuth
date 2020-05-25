@@ -14,7 +14,10 @@ namespace SimpleAuth.Business
         public readonly string ErrorMessage_UserDoesntExist = "User couldn't be found.";
         public readonly string ErrorMessage_RoleDoesntExist = "Role couldn't be found.";
 
-        public UserRoleBusiness(IUserRoleData data, IUserData userData, IRoleData roleData)
+        public UserRoleBusiness(
+            IUserRoleData data,
+            IUserData userData,
+            IRoleData roleData)
         {
             this.data = data;
             this.userData = userData;

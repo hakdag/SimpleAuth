@@ -101,6 +101,8 @@ namespace SimpleAuth.Api
             services.AddTransient<IValidator<CreateRoleVM>, CreateRoleValidator>();
             services.AddTransient<IValidator<UpdateRoleVM>, UpdateRoleValidator>();
             services.AddTransient<IValidator<UserRoleVM>, UserRoleValidator>();
+            services.AddTransient<IValidator<UserPermissionVM>, UserPermissionValidator>();
+            services.AddTransient<IValidator<RolePermissionVM>, RolePermissionValidator>();
             services.AddTransient<IValidator<ChangePasswordVM>, ChangePasswordValidator>();
             services.AddTransient<IValidator<LockAccountVM>, LockAccountValidator>();
             services.AddTransient<IValidator<GeneratePasswordResetKeyVM>, GeneratePasswordResetKeyValidator>();
@@ -110,6 +112,9 @@ namespace SimpleAuth.Api
             services.AddScoped<IUserBusiness, UserBusiness>();
             services.AddScoped<IRoleBusiness, RoleBusiness>();
             services.AddScoped<IUserRoleBusiness, UserRoleBusiness>();
+            services.AddScoped<IPermissionBusiness, PermissionBusiness>();
+            services.AddScoped<IUserPermissionBusiness, UserPermissionBusiness>();
+            services.AddScoped<IRolePermissionBusiness, RolePermissionBusiness>();
             services.AddScoped<IChangePasswordBusiness, ChangePasswordBusiness>();
             services.AddScoped<IPasswordHistoryBusiness>(s => new PasswordHistoryBusiness(s.GetRequiredService<IPasswordHistoryData>(), appSettings.PasswordChangeHistoryRule));
             services.AddScoped<IPasswordHasher, PasswordHasher>();
@@ -147,6 +152,9 @@ namespace SimpleAuth.Api
             services.AddScoped<IUserData, UserData>();
             services.AddScoped<IRoleData, RoleData>();
             services.AddScoped<IUserRoleData, UserRoleData>();
+            services.AddScoped<IPermissionData, PermissionData>();
+            services.AddScoped<IUserPermissionData, UserPermissionData>();
+            services.AddScoped<IRolePermissionData, RolePermissionData>();
             services.AddScoped<IChangePasswordData, ChangePasswordData>();
             services.AddScoped<IPasswordHistoryData, PasswordHistoryData>();
             services.AddScoped<ILockAccountData, LockAccountData>();

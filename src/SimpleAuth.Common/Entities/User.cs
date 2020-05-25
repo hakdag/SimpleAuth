@@ -12,5 +12,6 @@ namespace SimpleAuth.Common.Entities
 
         public DateTime? LastLoginDate { get; set; }
         public Role[] Roles { get; set; }
+        public Permission[] Permissions { get; set; }
     }
 }

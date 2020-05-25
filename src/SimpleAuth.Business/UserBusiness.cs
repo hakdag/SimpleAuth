@@ -13,8 +13,8 @@ namespace SimpleAuth.Business
         private readonly IPasswordHasher passwordHasher;
         private readonly IUserData data;
 
-        public readonly string ErrorMessage_UserDoesNotExist = "User does not exist.";
-        public readonly string ErrorMessage_UserNameExists = "UserName is taken.";
+        public readonly string ErrorMessage_UserDoesNotExist = "User with provided Id does not exist.";
+        public readonly string ErrorMessage_UserNameExists = "Another user with same UserName already exists.";
 
         public UserBusiness(IPasswordHasher passwordHasher, IUserData data)
         {
