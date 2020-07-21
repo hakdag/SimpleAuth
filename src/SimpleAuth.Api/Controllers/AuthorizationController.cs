@@ -14,10 +14,11 @@ namespace SimpleAuth.Api.Controllers
 
         public AuthorizationController(IAuthorizationBusiness service) => this.service = service;
 
+        [ApiConventionMethod(typeof(DefaultApiConventions), nameof(DefaultApiConventions.Post))]
         public async Task<ActionResult<AuthorizationResult>> Post([FromBody]AuthorizationModel model)
         {
             var result = await service.ValidateToken(model.Token);
-            return Ok(result);
+            return CreatedAtAction(nameof(Post), model, result);
         }
     }
 }

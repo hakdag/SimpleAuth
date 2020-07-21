@@ -13,6 +13,8 @@ namespace SimpleAuth.Data
         private readonly IRoleData roleData;
         private readonly IPermissionData permissionData;
         public readonly string ErrorMessage_DeleteUserError = "Error occured when deleting the user.";
+        public readonly string ErrorMessage_UserCouldNotBeFound = "User could not be found.";
+        public readonly string ErrorMessage_UserLogoutError = "Error occured when loging out the user.";
 
         public UserData(
             IRepository repository,
@@ -72,6 +74,25 @@ namespace SimpleAuth.Data
         public async Task UserLoggedIn(User user, string token, DateTime lastLoginDate)
             =>
                 await Execute("UPDATE public.user SET token = @token, lastlogindate = @lastLoginDate WHERE username = @userName", new { userName = user.UserName, token, lastLoginDate });
+
+        public async Task<ResponseResult> UserLoggedOut(string token)
+        {
+            // get user
+            var user = await RunQueryFirst("SELECT id, username, token FROM public.\"user\" where token = @token and isdeleted = false", new { token });
+            if (user == null)
+            {
+                return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UserCouldNotBeFound } };
+            }
+
+            // update user and set token to null
+            var result = await Execute("UPDATE public.user SET token = null WHERE id = @id", new { id = user.Id });
+            if (result > 0)
+            {
+                return new ResponseResult { Success = true };
+            }
+
+            return new ResponseResult { Success = false, Messages = new[] { ErrorMessage_UserLogoutError } };
+        }
 
         public async Task<User> GetById(long userId)
         {

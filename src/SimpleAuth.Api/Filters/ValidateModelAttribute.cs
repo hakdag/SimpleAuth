@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using SimpleAuth.Common;
 using System;
 using System.Linq;
+using System.Net;
 
 namespace SimpleAuth.Api.Filters
 {
@@ -17,7 +18,7 @@ namespace SimpleAuth.Api.Filters
                     Success = false,
                     Messages = new[] { "Model cannot be null" }
                 };
-                context.Result = new JsonResult(responseResult);
+                context.Result = new JsonResult(responseResult) { StatusCode = (int)HttpStatusCode.BadRequest };
                 return;
             }
             if (context.ModelState.IsValid)
@@ -25,7 +26,7 @@ namespace SimpleAuth.Api.Filters
                 return;
             }
             var rr = CreateResponseResultFromModelErrors(context);
-            context.Result = new JsonResult(rr);
+            context.Result = new JsonResult(rr) { StatusCode = (int) HttpStatusCode.OK };
         }
 
         private ResponseResult CreateResponseResultFromModelErrors(ActionExecutingContext actionContext)

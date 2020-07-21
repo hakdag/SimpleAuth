@@ -2,6 +2,7 @@
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
 using SimpleAuth.Contracts.Data;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
@@ -68,6 +69,10 @@ namespace SimpleAuth.Business
                 };
             }
             catch (SecurityTokenExpiredException exc)
+            {
+                return new AuthorizationResult { IsAuthorized = false };
+            }
+            catch (SecurityTokenInvalidSignatureException exc)
             {
                 return new AuthorizationResult { IsAuthorized = false };
             }

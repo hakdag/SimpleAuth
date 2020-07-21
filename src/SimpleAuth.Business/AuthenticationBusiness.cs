@@ -1,14 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using SimpleAuth.Common;
 using SimpleAuth.Contracts.Business;
 using SimpleAuth.Contracts.Business.Strategies;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SimpleAuth.Business
@@ -17,7 +10,7 @@ namespace SimpleAuth.Business
     {
         private readonly AppSettings appSettings;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IUserBusiness userService;
+        private readonly IUserBusiness userBusiness;
         private readonly ILockAccountBusiness lockAccountBusiness;
         private readonly IAuthenticateAttemptBusiness authenticateAttemptBusiness;
         private readonly IAuthenticateAttempsStrategy authenticateAttempsStrategy;
@@ -26,7 +19,7 @@ namespace SimpleAuth.Business
         public AuthenticationBusiness(
             IOptions<AppSettings> appSettings,
             IPasswordHasher passwordHasher,
-            IUserBusiness userService,
+            IUserBusiness userBusiness,
             ILockAccountBusiness lockAccountBusiness,
             IAuthenticateAttemptBusiness authenticateAttemptBusiness,
             IAuthenticateAttempsStrategy authenticateAttempsStrategy,
@@ -34,7 +27,7 @@ namespace SimpleAuth.Business
         {
             this.appSettings = appSettings.Value;
             this.passwordHasher = passwordHasher;
-            this.userService = userService;
+            this.userBusiness = userBusiness;
             this.lockAccountBusiness = lockAccountBusiness;
             this.authenticateAttemptBusiness = authenticateAttemptBusiness;
             this.authenticateAttempsStrategy = authenticateAttempsStrategy;
@@ -43,7 +36,7 @@ namespace SimpleAuth.Business
 
         public async Task<AuthenticationToken> Authenticate(string username, string password)
         {
-            var user = await userService.GetByUserName(username);
+            var user = await userBusiness.GetByUserName(username);
             if (user == null)
             {
                 return null;
@@ -65,9 +58,15 @@ namespace SimpleAuth.Business
             var authenticationToken = tokenGenerationBusiness.Generate(user, appSettings.Secret);
 
             // update user login date and token fields
-            await userService.UserLoggedIn(user, authenticationToken.token);
+            await userBusiness.UserLoggedIn(user, authenticationToken.token);
 
             return authenticationToken;
+        }
+
+        public async Task<ResponseResult> Logout(string token)
+        {
+            var logoutResponse = await userBusiness.UserLoggedOut(token);
+            return logoutResponse;
         }
     }
 }

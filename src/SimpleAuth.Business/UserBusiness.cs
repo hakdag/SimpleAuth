@@ -64,6 +64,8 @@ namespace SimpleAuth.Business
 
         public async Task UserLoggedIn(User user, string token) => await data.UserLoggedIn(user, token, DateTime.Now);
 
+        public async Task<ResponseResult> UserLoggedOut(string token) => await data.UserLoggedOut(token);
+
         public async Task<ResponseResult> Delete(long id) => await data.Delete(id);
     }
 }

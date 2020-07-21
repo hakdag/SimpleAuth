@@ -6,5 +6,6 @@ namespace SimpleAuth.Contracts.Business
     public interface IAuthenticationBusiness
     {
         Task<AuthenticationToken> Authenticate(string username, string password);
+        Task<ResponseResult> Logout(string token);
     }
 }

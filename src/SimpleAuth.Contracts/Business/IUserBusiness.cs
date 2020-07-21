@@ -14,5 +14,6 @@ namespace SimpleAuth.Contracts.Business
         Task UserLoggedIn(User user, string token);
         Task<ResponseResult> Delete(long id);
         Task<ResponseResult> Update(long id, string newUserName);
+        Task<ResponseResult> UserLoggedOut(string token);
     }
 }
