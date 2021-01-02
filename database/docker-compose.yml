@@ -1,0 +1,16 @@
+version: "3"
+services:
+  db_auth_betoncrm:
+    image: postgres
+    volumes:
+      - pgdata_auth_betoncrm:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgress
+      - POSTGRES_DB=db_auth_betoncrm
+
+volumes: 
+  pgdata_auth_betoncrm:
+    driver: local
