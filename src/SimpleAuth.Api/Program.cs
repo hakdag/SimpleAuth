@@ -16,7 +16,7 @@ namespace SimpleAuth.Api
                 {
                     webBuilder
                         .UseStartup<Startup>()
-                        .UseUrls("http://localhost:4000");
+                        .UseUrls("http://*:80");
                 });
     }
 }
